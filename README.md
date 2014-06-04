@@ -3,6 +3,6 @@ Daedalus
 
 Daedalus Proyect : 
 
-  --Soon to be uploaded
+  --Description soon to be uploaded
   
 
