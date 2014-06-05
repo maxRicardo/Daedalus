@@ -11,10 +11,10 @@ Options = {"Lines": -1 , "Mean_AC": -1}
 Features_ID = {"GG": [],"De_Novo":[]}
 
 
-def Parse_Feature_ID(opt):
+def parse_features(opt):
 	#opt is a dictionary with all the options given from optget
 	
-	doc = open(opt["-i"],"r") # this depends in the formating on optget from the script
+	doc = open(opt.features_path,"r") # this depends in the formating on optget from the script
 	doc.readline() # Headers ... not much neaded right now 
 	
 	for line in doc:
@@ -62,7 +62,14 @@ def stats_summary_with_plots(Feature_ID):
 		r.hist(group_list,main = group+" Histogram", xlab = group)
 		r.curve(dnorm(x,mean = mean(group_list), sd = sd(group_list)), col = "red", add = T)
 		div.off()
-		#function to making the html part .....
+	#function to making the html part .....
+	make_html_report()
+
+
+	# making stats comparison ( simple t-test betwee groups ) 
+		 
+
+
 
 			
 

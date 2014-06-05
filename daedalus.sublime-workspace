@@ -131,7 +131,7 @@
 			"file": "src/parse_feature_id.py",
 			"settings":
 			{
-				"buffer_size": 1442,
+				"buffer_size": 2886,
 				"line_ending": "Unix"
 			}
 		}
@@ -139,9 +139,21 @@
 	"build_system": "",
 	"command_palette":
 	{
-		"height": 392.0,
+		"height": 264.0,
 		"selected_items":
 		[
+			[
+				"inde	",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"inde",
+				"Indentation: Reindent Lines"
+			],
+			[
+				"ind	",
+				"Indentation: Reindent Lines"
+			],
 			[
 				"",
 				"File: Revert"
@@ -171,10 +183,6 @@
 				"Indentation: Reindent Lines"
 			],
 			[
-				"inde",
-				"Indentation: Reindent Lines"
-			],
-			[
 				"ind",
 				"Indentation: Reindent Lines"
 			],
@@ -183,7 +191,7 @@
 				"Preferences: Browse Packages"
 			]
 		],
-		"width": 449.0
+		"width": 458.0
 	},
 	"console":
 	{
@@ -215,6 +223,9 @@
 	},
 	"file_history":
 	[
+		"/home/ricardo/Documents/MSSM_Proyect/index.html",
+		"/home/ricardo/Documents/MSSM_Proyect/Daedalus/Test_Files/feature_importance_scores.txt",
+		"/home/ricardo/Documents/MSSM_Proyect/Daedalus/Test_Files/confusion_matrix.txt",
 		"/media/ricardo/9016-4EF8/Nintendo 3DS/f62d296fe926503ae03c87dbf3775e63/dd0a00c430100dce30303030001b534d/extdata/00000000/00000217/00000000/00000001",
 		"/home/ricardo/Analisis HPV/Analysis/summary_biom_table.txt",
 		"/home/ricardo/Analisis HPV/Analysis/parse_sum_biom.py",
@@ -298,15 +309,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1442,
+						"buffer_size": 2886,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1418,
-								1418
+								1635,
+								1635
 							]
 						],
 						"settings":
@@ -315,7 +326,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 462.0,
+						"translation.y": 1196.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
