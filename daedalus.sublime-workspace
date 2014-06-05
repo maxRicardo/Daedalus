@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"feat",
+				"feature"
+			],
+			[
+				"fe",
+				"features_path"
+			],
+			[
 				"grou",
 				"group_list"
 			],
@@ -131,7 +139,15 @@
 			"file": "src/parse_feature_id.py",
 			"settings":
 			{
-				"buffer_size": 2886,
+				"buffer_size": 3094,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/compare_supervised_features.py",
+			"settings":
+			{
+				"buffer_size": 912,
 				"line_ending": "Unix"
 			}
 		}
@@ -143,11 +159,11 @@
 		"selected_items":
 		[
 			[
-				"inde	",
+				"inde",
 				"Indentation: Reindent Lines"
 			],
 			[
-				"inde",
+				"inde	",
 				"Indentation: Reindent Lines"
 			],
 			[
@@ -223,8 +239,9 @@
 	},
 	"file_history":
 	[
-		"/home/ricardo/Documents/MSSM_Proyect/index.html",
 		"/home/ricardo/Documents/MSSM_Proyect/Daedalus/Test_Files/feature_importance_scores.txt",
+		"/home/ricardo/Documents/MSSM_Proyect/Daedalus/src/supervised_stats_comparison.py",
+		"/home/ricardo/Documents/MSSM_Proyect/index.html",
 		"/home/ricardo/Documents/MSSM_Proyect/Daedalus/Test_Files/confusion_matrix.txt",
 		"/media/ricardo/9016-4EF8/Nintendo 3DS/f62d296fe926503ae03c87dbf3775e63/dd0a00c430100dce30303030001b534d/extdata/00000000/00000217/00000000/00000001",
 		"/home/ricardo/Analisis HPV/Analysis/summary_biom_table.txt",
@@ -274,6 +291,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"()\n",
 			"\n			",
 			"firmware",
 			"firm",
@@ -309,15 +327,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2886,
+						"buffer_size": 3094,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1635,
-								1635
+								1841,
+								1841
 							]
 						],
 						"settings":
@@ -326,10 +344,38 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1196.0,
+						"translation.y": 855.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/compare_supervised_features.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 912,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								912,
+								912
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": -0.0,
+						"translation.y": 114.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
