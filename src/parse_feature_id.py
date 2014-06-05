@@ -18,20 +18,24 @@ def parse_features(opt):
 	doc.readline() # Headers ... not much neaded right now 
 	
 	for line in doc:
-		s = str(line).strip().split(" ")
+		s = str(line).strip().split("\t")
 		
 		# e is a touple with (feature id, mean accuracy)
 		
 		if "De_Novo" in s[0]:
+			
 			e = (s[0],s[1])
-			Feature_ID["De_Novo"].append(e)
+			Features_ID["De_Novo"].append(e)
 		else:
+			
 			e = (s[0],s[1])
-			Feature_ID["GG"].append(e)
+			Features_ID["GG"].append(e)
 			
-			doc.close()
-			
-			return Feature_ID 
+	
+	doc.close()
+	return Features_ID
+
+
 	# dict returning the divided parse of features and their respective mean accuracy
 	
 	##### DATA STRUCT
@@ -50,17 +54,21 @@ def stats_summary_with_plots(Feature_ID):
 	import os
 
 	r = ro.r
-		
+	os.mkdir("Output_Images%j")
 	for group in Feature_ID:
-		group_list = ro.IntVector(Feature_ID[group])
-		summ = str(r.summary(group_list)).split("\n")
+		group_list = []
+		for i in Feature_ID[group]:
+			group_list.append(i[1])
+		print group_list
 
-		os.mkdir("Output_Images")
+		group_list_ro = ro.IntVector(Feature_ID[group])
+		summ = str(r.summary(group_list_ro)).split("\n")
 		r.x11()
+
 		## Plot making part ...
 		r.jpeg("Output_Images/"+group+"_summary.jpeg")
-		r.hist(group_list,main = group+" Histogram", xlab = group)
-		r.curve(dnorm(x,mean = mean(group_list), sd = sd(group_list)), col = "red", add = T)
+		r.hist(group_list_ro,main = group+" Histogram", xlab = group)
+		r.curve(dnorm(x,mean = mean(group_list_ro), sd = sd(group_list_ro)), col = "red", add = T)
 		div.off()
 	#function to making the html part .....
 	make_html_report()
