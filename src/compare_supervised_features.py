@@ -26,7 +26,7 @@ def parse_arguments():
 def main():
 	opt = parse_arguments()
 	feature_id = pfi.parse_features(opt)
-	pfi.stats_summary_with_plots(feature_id)
+	pfi.normal_stats_fit_plots(feature_id)
 
 
 

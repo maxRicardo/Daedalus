@@ -6,7 +6,7 @@
 
 # rpy2 for r manipulation from python 
 
-Flags = { "Lines": False , "Mean_AC": False}
+Flags = { "Lines": False , "Mean_AC": False,"GG":True,"De_Novo":True}
 Options = {"Lines": -1 , "Mean_AC": -1}
 Features_ID = {"GG": [],"De_Novo":[]}
 
@@ -49,27 +49,42 @@ def parse_features(opt):
 	## R Summary from both of the features group as std.out
 
 
-def stats_summary_with_plots(Feature_ID):
+def normal_stats_fit_plots(Feature_ID):
+
 	import rpy2.robjects as ro
-	import os
+	import os,shutil
 
 	r = ro.r
-	os.mkdir("Output_Images%j")
+	
+	try :
+		os.mkdir("Output_Images")
+	except OSError:
+		shutil.rmtree("Output_Images")
+		os.mkdir("Output_Images")
+
+		
+	
+
 	for group in Feature_ID:
 		group_list = []
 		for i in Feature_ID[group]:
-			group_list.append(i[1])
-		print group_list
+			group_list.append(eval(i[1]))
+		
 
-		group_list_ro = ro.IntVector(Feature_ID[group])
+		if len(group_list) == 0:
+			# should add info here to evaluation log!
+			Flags[group] = False
+			continue
+
+
+		group_list_ro = ro.FloatVector(group_list)
 		summ = str(r.summary(group_list_ro)).split("\n")
-		r.x11()
 
 		## Plot making part ...
 		r.jpeg("Output_Images/"+group+"_summary.jpeg")
 		r.hist(group_list_ro,main = group+" Histogram", xlab = group)
-		r.curve(dnorm(x,mean = mean(group_list_ro), sd = sd(group_list_ro)), col = "red", add = T)
-		div.off()
+		ro.globalenv["group_list_ro"] = group_list_ro
+		r('curve(dnorm(x,mean = mean(group_list_ro), sd = sd(group_list_ro)), col = "red" , add = T)')
 	#function to making the html part .....
 	make_html_report()
 
@@ -86,7 +101,7 @@ def stats_summary_with_plots(Feature_ID):
 def make_html_report():
 	import datetime as dt
 
-	page_template = """
+	page_head = """
 	<html>
 	<head>
 	<title>Daedalus Report</title> 
@@ -107,6 +122,8 @@ def make_html_report():
 	analises on the supervised learning script from Qiime<br>
 	</p><br>
 
+	"""
+	GG_image = """
 
 	<!-- Image content for GG -->
 
@@ -115,12 +132,19 @@ def make_html_report():
 	<img src = {gg_image} alt = "gg graphs" width = "480" height = "480" border = "1">
 	</div><br>
 
+	"""
+
+	De_Novo_image = """
+
 	<!-- Image content for the De NOVO -->
 
 	<div align="center">
 	<em>De Novo Summary Behavior</em><br>
 	<img src = {de_novo_image} alt = "de-novo graphs" width = "480" height = "480" border = "1">
 	</div>
+	"""
+
+	page_tail = """
 
 	</body>
 
@@ -128,14 +152,25 @@ def make_html_report():
 
 	"""
 
-	gg_image = "/Output_Images/gg_summary.jpeg"
-	de_novo_image = "/Output_Images/De_Novo_summary.jpeg"
+	if Flags["GG"]:
+		full_page = page_head+GG_image
+
+	if Flags["De_Novo"]:
+		full_page = full_page+De_Novo_image
+
+	full_page = full_page+page_tail
+
+
+
+
+	gg_image = '"GG_summary.jpeg"'
+	de_novo_image = '"De_Novo_summary.jpeg"'
 	dte = dt.date.today()
 	date = dte.strftime("%A %B %Y")
 
 	## Creating the html perse!
-	doc = open("daedalus_report.html","w")
-	doc.write(page_template.format(**locals()))
+	doc = open("Output_Images/daedalus_report.html","w")
+	doc.write(full_page.format(**locals()))
 	doc.close()
 
 
