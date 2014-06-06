@@ -11,7 +11,7 @@ def parse_arguments():
 	parser = argparse.ArgumentParser(description = " Script desing to compare state and distrubition of features from Qiime- Supervised Learning ",prog = "compare_supervised_features")
 
 	parser.add_argument("-i",help = "Input Feature Importance Scores. ", required = True , dest = "features_path" , type = str)
-	parser.add_argument("-n",help = "total number of features from file to read",dest = "features" , type = int)
+	parser.add_argument("-n",help = "total number of features from file to read",default = 99999, dest = "features" , type = int)
 	parser.add_argument("--accuracy",help = "will stop reading features at this 'accuracy score'",dest = "accuracy" , type = str)
 	parser.add_argument("-o",help = "The directory to where the results will be written to. ", default = "CSF_output", dest = "output_path", type = str)
 	opt = parser.parse_args()

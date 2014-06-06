@@ -7,7 +7,6 @@
 # rpy2 for r manipulation from python 
 
 Flags = { "Lines": False , "Mean_AC": False,"GG":True,"De_Novo":True}
-Options = {"Lines": -1 , "Mean_AC": -1}
 Features_ID = {"GG": [],"De_Novo":[]}
 
 
@@ -16,9 +15,11 @@ def parse_features(opt):
 	
 	doc = open(opt.features_path,"r") # this depends in the formating on optget from the script
 	doc.readline() # Headers ... not much neaded right now 
-	
+	line_counter = 0
+
 	for line in doc:
 		s = str(line).strip().split("\t")
+		line_counter +=1
 		
 		# e is a touple with (feature id, mean accuracy)
 		
@@ -30,6 +31,11 @@ def parse_features(opt):
 			
 			e = (s[0],s[1])
 			Features_ID["GG"].append(e)
+
+		if line_counter == opt.features :
+			print line_counter
+			print Features_ID
+			break
 			
 	
 	doc.close()
@@ -75,14 +81,18 @@ def normal_stats_fit_plots(Feature_ID,output_path):
 
 
 		group_list_ro = ro.FloatVector(group_list)
+		print "\n"
+		print group_list
 		summ = str(r.summary(group_list_ro)).split("\n")
 
 		## Plot making part ...
 		r.jpeg(output_path+"/"+group+"_summary.jpeg")
-		r.hist(group_list_ro,main = group+" Histogram", xlab = group)
+		r.hist(group_list_ro,main = group+" Histogram", xlab = group , prob = True)
 		ro.globalenv["group_list_ro"] = group_list_ro
 		r('curve(dnorm(x,mean = mean(group_list_ro), sd = sd(group_list_ro)), col = "red" , add = T)')
+
 	#function to making the html part .....
+
 	make_html_report(output_path)
 
 
@@ -114,7 +124,7 @@ def make_html_report(output_path):
 	</p>
 
 	<p align = "center">
-	Representation from this graphs just gives a initial platform of<br> 
+	Representation from these graphs just gives a initial platform of<br> 
 	visualization for the results to be seen in the future from this graph<br>
 	analyses on the supervised learning script from Qiime<br>
 	</p><br>
