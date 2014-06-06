@@ -13,8 +13,9 @@ def parse_arguments():
 	parser.add_argument("-i",help = "Input Feature Importance Scores. ", required = True , dest = "features_path" , type = str)
 	parser.add_argument("-n",help = "total number of features from file to read",dest = "features" , type = int)
 	parser.add_argument("--accuracy",help = "will stop reading features at this 'accuracy score'",dest = "accuracy" , type = str)
-
+	parser.add_argument("-o",help = "The directory to where the results will be written to. ", default = "CSF_output", dest = "output_path", type = str)
 	opt = parser.parse_args()
+	print opt.output_path
 	return opt
 
 
@@ -26,7 +27,7 @@ def parse_arguments():
 def main():
 	opt = parse_arguments()
 	feature_id = pfi.parse_features(opt)
-	pfi.normal_stats_fit_plots(feature_id)
+	pfi.normal_stats_fit_plots(feature_id,opt.output_path)
 
 
 

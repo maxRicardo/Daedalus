@@ -49,7 +49,7 @@ def parse_features(opt):
 	## R Summary from both of the features group as std.out
 
 
-def normal_stats_fit_plots(Feature_ID):
+def normal_stats_fit_plots(Feature_ID,output_path):
 
 	import rpy2.robjects as ro
 	import os,shutil
@@ -57,13 +57,10 @@ def normal_stats_fit_plots(Feature_ID):
 	r = ro.r
 	
 	try :
-		os.mkdir("Output_Images")
+		os.mkdir(output_path)
 	except OSError:
-		shutil.rmtree("Output_Images")
-		os.mkdir("Output_Images")
+		raise OSError("File path already exist meaning you already used this path or you are running defualt again")
 
-		
-	
 
 	for group in Feature_ID:
 		group_list = []
@@ -81,12 +78,12 @@ def normal_stats_fit_plots(Feature_ID):
 		summ = str(r.summary(group_list_ro)).split("\n")
 
 		## Plot making part ...
-		r.jpeg("Output_Images/"+group+"_summary.jpeg")
+		r.jpeg(output_path+"/"+group+"_summary.jpeg")
 		r.hist(group_list_ro,main = group+" Histogram", xlab = group)
 		ro.globalenv["group_list_ro"] = group_list_ro
 		r('curve(dnorm(x,mean = mean(group_list_ro), sd = sd(group_list_ro)), col = "red" , add = T)')
 	#function to making the html part .....
-	make_html_report()
+	make_html_report(output_path)
 
 
 	# making stats comparison ( simple t-test betwee groups ) 
@@ -98,7 +95,7 @@ def normal_stats_fit_plots(Feature_ID):
 
 
 
-def make_html_report():
+def make_html_report(output_path):
 	import datetime as dt
 
 	page_head = """
@@ -119,7 +116,7 @@ def make_html_report():
 	<p align = "center">
 	Representation from this graphs just gives a initial platform of<br> 
 	visualization for the results to be seen in the future from this graph<br>
-	analises on the supervised learning script from Qiime<br>
+	analyses on the supervised learning script from Qiime<br>
 	</p><br>
 
 	"""
@@ -128,7 +125,7 @@ def make_html_report():
 	<!-- Image content for GG -->
 
 	<div align="center">
-	<em>Gren Gene Summary Behavior</em><br>
+	<em>Green Gene Summary Behavior</em><br>
 	<img src = {gg_image} alt = "gg graphs" width = "480" height = "480" border = "1">
 	</div><br>
 
@@ -169,7 +166,7 @@ def make_html_report():
 	date = dte.strftime("%A %B %Y")
 
 	## Creating the html perse!
-	doc = open("Output_Images/daedalus_report.html","w")
+	doc = open(output_path+"/daedalus_report.html","w")
 	doc.write(full_page.format(**locals()))
 	doc.close()
 
