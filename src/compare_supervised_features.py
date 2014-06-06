@@ -28,6 +28,8 @@ def main():
 	opt = parse_arguments()
 	feature_id = pfi.parse_features(opt)
 	pfi.normal_stats_fit_plots(feature_id,opt.output_path)
+	pfi.stats_normality_and_comaprison(feature_id)
+
 
 
 

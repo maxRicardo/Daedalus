@@ -5,7 +5,12 @@
 # Parser for feature_importance_score 
 
 # rpy2 for r manipulation from python 
+import rpy2.robjects as ro
+import os
+import datetime as dt
 
+
+r = ro.r
 Flags = { "Lines": False , "Mean_AC": False,"GG":True,"De_Novo":True}
 Features_ID = {"GG": [],"De_Novo":[]}
 
@@ -55,13 +60,46 @@ def parse_features(opt):
 	## R Summary from both of the features group as std.out
 
 
+def stats_normality_and_comaprison(Feature_ID):
+	from rpy2.robjects.packages import importr as library
+	stats  = library('stats')
+	gg_group = [] 
+	de_novo_group = []
+
+	if Flags["GG"] :
+		for i in Feature_ID["GG"]:
+			gg_group.append(eval(i[1]))
+		print "Green Gene Kruskal Test"
+		print stats.kruskal_test(ro.r('as.list')(ro.FloatVector(gg_group)))
+
+		print "Green Gene QQPLot Test "
+		print stats.qqnorm(ro.FloatVector(gg_group))
+
+
+	if Flags["De_Novo"]:
+		for i in Feature_ID["De_Novo"]:
+			de_novo_group.append(eval(i[1]))
+		print "De Novo : Kruskal Test "
+		print stats.kruskal_test(ro.r('as.list')(ro.FloatVector(de_novo_group)))
+
+
+	if Flags["GG"] and Flags["De_Novo"]:
+		print "Wilcoxon Test GG vs. De Novo"
+		print stats.wilcox.test(ro.r('as.list')(ro.FloatVector(gg_group)),ro.r('as.list')(ro.FloatVector(de_novo_group)))
+		
+		print "\n\n"
+
+		print "T test comparison GG vs. De Novo"
+		print stats.t.test(ro.r('as.list')(ro.FloatVector(gg_group)),ro.r('as.list')(ro.FloatVector(de_novo_group)))
+
+
+
+
+
+
+
 def normal_stats_fit_plots(Feature_ID,output_path):
 
-	import rpy2.robjects as ro
-	import os,shutil
-
-	r = ro.r
-	
 	try :
 		os.mkdir(output_path)
 	except OSError:
@@ -81,8 +119,6 @@ def normal_stats_fit_plots(Feature_ID,output_path):
 
 
 		group_list_ro = ro.FloatVector(group_list)
-		print "\n"
-		print group_list
 		summ = str(r.summary(group_list_ro)).split("\n")
 
 		## Plot making part ...
