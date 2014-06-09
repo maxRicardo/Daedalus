@@ -4,6 +4,9 @@
 # Date : May 30 2014
 # Parser for feature_importance_score 
 
+
+# testing the import and github system
+
 # rpy2 for r manipulation from python 
 import rpy2.robjects as ro
 import os
@@ -73,8 +76,13 @@ def stats_normality_and_comaprison(Feature_ID):
 		print stats.kruskal_test(ro.r('as.list')(ro.FloatVector(gg_group)))
 
 		print "Green Gene QQPLot Test "
-		print stats.qqnorm(ro.FloatVector(gg_group))
-
+		qq = stats.qqnorm(ro.FloatVector(gg_group))
+		print qq[0]
+		print qq[1]
+		r.x11()
+		r.jpeg("qqplot.jpeg")
+		stats.qqplot(qq[1],qq[0], col = "red",xlab = "x points",ylab = "y points")
+		r('dev.off')()
 
 	if Flags["De_Novo"]:
 		for i in Feature_ID["De_Novo"]:
@@ -126,6 +134,7 @@ def normal_stats_fit_plots(Feature_ID,output_path):
 		r.hist(group_list_ro,main = group+" Histogram", xlab = group , prob = True)
 		ro.globalenv["group_list_ro"] = group_list_ro
 		r('curve(dnorm(x,mean = mean(group_list_ro), sd = sd(group_list_ro)), col = "red" , add = T)')
+		r('dev.off')()
 
 	#function to making the html part .....
 
