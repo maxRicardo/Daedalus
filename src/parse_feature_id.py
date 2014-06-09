@@ -10,20 +10,24 @@
 # rpy2 for r manipulation from python 
 import rpy2.robjects as ro
 import os
+from numpy import array
 import datetime as dt
 
 
 r = ro.r
 Flags = { "Lines": False , "Mean_AC": False,"GG":True,"De_Novo":True}
-Features_ID = {"GG": [],"De_Novo":[]}
+Feature_ID = {}
+
 
 
 def parse_features(opt):
 	#opt is a dictionary with all the options given from optget
 	
+	deNovo  = [] , GG = []
 	doc = open(opt.features_path,"r") # this depends in the formating on optget from the script
 	doc.readline() # Headers ... not much neaded right now 
 	line_counter = 0
+
 
 	for line in doc:
 		s = str(line).strip().split("\t")
@@ -34,11 +38,11 @@ def parse_features(opt):
 		if "De_Novo" in s[0]:
 			
 			e = (s[0],s[1])
-			Features_ID["De_Novo"].append(e)
+			deNovo.append(e)
 		else:
 			
 			e = (s[0],s[1])
-			Features_ID["GG"].append(e)
+			GG.append(e)
 
 		if line_counter == opt.features :
 			print line_counter
@@ -47,6 +51,9 @@ def parse_features(opt):
 			
 	
 	doc.close()
+	Features_ID["De_Novo"] = array(deNovo,dtype = float)
+	Features_ID["GG"] = array(GG,dtype = float)
+
 	return Features_ID
 
 
@@ -54,8 +61,8 @@ def parse_features(opt):
 	
 	##### DATA STRUCT
 	## feature_id { 
-	#				GG : [ (gg_number , mean accuracy).....] , 
-	#				De_Novo : [(number , mean accuracy)....]
+	#				GG : array ([feature id] [score] ), 
+	#				De_Novo : array( [feature id] [score] )
 	#			  }
 	
 	
