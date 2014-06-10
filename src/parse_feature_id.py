@@ -5,16 +5,20 @@
 # Parser for feature_importance_score 
 
 
-# testing the import and github system
+## ---> Under work to change from R implementation with rpy2 packages to Numpy Scipy and Matplot lib 
 
 # rpy2 for r manipulation from python 
-import rpy2.robjects as ro
-import os
-from numpy import array
+
+#import rpy2.robjects as ro <---- ready for depr.
+
+from matplotlib import pylab as plb
+from scipy import stats
 import datetime as dt
+import numpy as np
+import os
 
 
-r = ro.r
+
 Flags = { "Lines": False , "Mean_AC": False,"GG":True,"De_Novo":True}
 Feature_ID = {}
 
@@ -23,7 +27,10 @@ Feature_ID = {}
 def parse_features(opt):
 	#opt is a dictionary with all the options given from optget
 	
-	deNovo  = [] , GG = []
+	deNovo  = [] 
+	GG = []
+
+
 	doc = open(opt.features_path,"r") # this depends in the formating on optget from the script
 	doc.readline() # Headers ... not much neaded right now 
 	line_counter = 0
@@ -51,10 +58,10 @@ def parse_features(opt):
 			
 	
 	doc.close()
-	Features_ID["De_Novo"] = array(deNovo,dtype = float)
-	Features_ID["GG"] = array(GG,dtype = float)
+	Feature_ID["De_Novo"] = np.array(deNovo,dtype = float)
+	Feature_ID["GG"] = np.array(GG,dtype = float)
 
-	return Features_ID
+	return Feature_ID
 
 
 	# dict returning the divided parse of features and their respective mean accuracy
@@ -70,61 +77,46 @@ def parse_features(opt):
 	## R Summary from both of the features group as std.out
 
 
-def stats_normality_and_comaprison(Feature_ID):
-	from rpy2.robjects.packages import importr as library
-	stats  = library('stats')
-	gg_group = [] 
-	de_novo_group = []
 
-	if Flags["GG"] :
-		for i in Feature_ID["GG"]:
-			gg_group.append(eval(i[1]))
-		print "Green Gene Kruskal Test"
-		print stats.kruskal_test(ro.r('as.list')(ro.FloatVector(gg_group)))
+## feature group here is send as an np array 
+# test should be done in a indivudal form 
 
-		print "Green Gene QQPLot Test "
-		qq = stats.qqnorm(ro.FloatVector(gg_group))
-		print qq[0]
-		print qq[1]
-		r.x11()
-		r.jpeg("qqplot.jpeg")
-		stats.qqplot(qq[1],qq[0], col = "red",xlab = "x points",ylab = "y points")
-		r('dev.off')()
+def group_summary(feature_group,output_path):
+	Summ = ''' 
+			Summary
+	------------------------
+	Mean         : {mean}
+	St.Deviation : {std}
+	Normal Test  : {normal_value}
+	P-Value      : {p_value}
 
-	if Flags["De_Novo"]:
-		for i in Feature_ID["De_Novo"]:
-			de_novo_group.append(eval(i[1]))
-		print "De Novo : Kruskal Test "
-		print stats.kruskal_test(ro.r('as.list')(ro.FloatVector(de_novo_group)))
+	'''
 
+	summ = {}
 
-	if Flags["GG"] and Flags["De_Novo"]:
-		print "Wilcoxon Test GG vs. De Novo"
-		print stats.wilcox.test(ro.r('as.list')(ro.FloatVector(gg_group)),ro.r('as.list')(ro.FloatVector(de_novo_group)))
-		
-		print "\n\n"
+	summ["mean"] = np.mean(feature_group)
+	summ["std"] = np.std(feature_group)
 
-		print "T test comparison GG vs. De Novo"
-		print stats.t.test(ro.r('as.list')(ro.FloatVector(gg_group)),ro.r('as.list')(ro.FloatVector(de_novo_group)))
+	data = sorted(feature_group)
+	fit = stats.ttest_ind(data,summ["mean"],summ["std"])
 
+	summ["normal_value"],summ["p_value"] = stats.normaltest(feature_group)
 
+	plb.figure()
+	plb.hist(data,color = 'green')
+	plb.plot(data,fit,'r*-')
+	plb.savefig(output_path+"normal_group_fit.jpeg")
 
+	return 0
 
 
 
 
 def normal_stats_fit_plots(Feature_ID,output_path):
 
-	try :
-		os.mkdir(output_path)
-	except OSError:
-		raise OSError("File path already exist meaning you already used this path or you are running defualt again")
-
 
 	for group in Feature_ID:
-		group_list = []
-		for i in Feature_ID[group]:
-			group_list.append(eval(i[1]))
+		group_list = Feature_ID[group][:,1]
 		
 
 		if len(group_list) == 0:

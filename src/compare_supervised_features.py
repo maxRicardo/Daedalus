@@ -1,6 +1,7 @@
 #!/usr/bin/python2.7
 import argparse
 import parse_feature_id as pfi
+import os
 
 
 
@@ -26,9 +27,15 @@ def parse_arguments():
 
 def main():
 	opt = parse_arguments()
+
+	try :
+		os.mkdir(opt.output_path)
+	except OSError:
+		raise OSError("File path already exist meaning you already used this path or you are running defualt again")
+
 	feature_id = pfi.parse_features(opt)
-	pfi.normal_stats_fit_plots(feature_id,opt.output_path)
-	pfi.stats_normality_and_comaprison(feature_id)
+	#pfi.normal_stats_fit_plots(feature_id,opt.output_path)
+	pfi.group_summary(feature_id["GG"][:,1],opt.output_path)
 
 
 
