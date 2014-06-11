@@ -42,9 +42,10 @@ def main():
 			raise OSError("File path already exist!")
 
 	feature_id = utils.parse_feature_importance_scores(opt)
-	#utils.normal_stats_fit_plots(feature_id,opt.output_path)
 	feature_id["GG"].toString()
-	print utils.normality_check(feature_id["GG"],opt.output_path)
+	import numpy.random as r
+	test_group = r.normal(size = len(feature_id["GG"].get_scores()))
+	utils.compare_feature_groups(feature_id["GG"],feature_id["GG"])
 
 
 

@@ -12,12 +12,10 @@
 #import rpy2.robjects as ro <---- ready for depr.
 
 from matplotlib import pylab as plb
+from feature_group import feature_group as fg
 from scipy import stats
 import datetime as dt
 import numpy as np
-import os
-from math import sqrt
-from feature_group import feature_group as fg
 
 
 
@@ -116,9 +114,29 @@ def normality_check(feature_group,output_path):
 
 
 
+def compare_feature_groups(fg1,fg2):
+
+	if fg1.variance() == fg2.variance():
+		ttest = stats.ttest_ind(fg1.get_scores(),fg2.get_scores())
+		print "Equal Variance "
+
+	else :
+		ttest = stats.ttest_ind(fg1.get_scores(),fg2.get_scores(),equal_var = False)
+		print "Different Variance"
+
+	temp = '''
+
+		T-test Results 
+	---------------------------
+	P value   |    {0}
+
+	'''
+	print temp.format(ttest[1])
+	return ttest[1] > 0.05
 
 
-	
+
+
 
 
 
