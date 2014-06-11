@@ -16,14 +16,17 @@ class feature_group :
 			self.__features = rep_group[:, 0]
 			self.__scores = np.asarray(rep_group[:, 1] , dtype = "float64")
 			self.__summary = stats.describe(self.__scores)
+			self.__empty = False
 
 		else :
 			print "Empty group presented! "
+			self.__empty = True 
+
 
 
 
 	def isEmpty(self):
-		return len(self.__features) is 0
+		return self.__empty
 
 	def get_features(self):
 		return self.__features

@@ -39,13 +39,19 @@ def main():
 			os.mkdir(opt.output_path)
 			
 		else:
+			print opt.output_path
 			raise OSError("File path already exist!")
 
+	
 	feature_id = utils.parse_feature_importance_scores(opt)
-	feature_id["GG"].toString()
-	import numpy.random as r
-	test_group = r.normal(size = len(feature_id["GG"].get_scores()))
-	utils.compare_feature_groups(feature_id["GG"],feature_id["GG"])
+
+	for group in feature_id:
+		if not feature_id[group].isEmpty():
+			feature_id[group].toString()
+			
+	
+	if not feature_id["GG"].isEmpty() and  not feature_id["De_Novo"].isEmpty():
+		utils.compare_feature_groups(feature_id["GG"],feature_id["De_Novo"])
 
 
 
