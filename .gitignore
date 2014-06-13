@@ -10,6 +10,8 @@
 # Packages
 *.egg
 *.egg-info
+*.sublime-project
+*.sublime-workspace
 dist
 build
 eggs
