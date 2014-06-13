@@ -1,13 +1,13 @@
-#!/usr/bin/python2.7
+#!/usr/bin/env python
+from __future__ import division
+
 import argparse
-import utils
-import feature_group
 import os
 
-
-
+import daedalus.utils
 
 ## Script to compare feature in a "feature importance scores" file 
+
 
 def parse_arguments():
 	parser = argparse.ArgumentParser(description = " Script desing to compare state and distrubition of features from Qiime- Supervised Learning ",prog = "compare_supervised_features")
@@ -20,11 +20,6 @@ def parse_arguments():
 	opt = parser.parse_args()
 
 	return opt
-
-
-
-
-
 
 
 def main():
@@ -42,20 +37,14 @@ def main():
 			print opt.output_path
 			raise OSError("File path already exist!")
 
-	
-	feature_id = utils.parse_feature_importance_scores(opt)
+	feature_id = daedalus.utils.parse_feature_importance_scores(opt)
 
 	for group in feature_id:
 		if not feature_id[group].isEmpty():
 			feature_id[group].toString()
-			
 	
 	if not feature_id["GG"].isEmpty() and  not feature_id["De_Novo"].isEmpty():
-		utils.compare_feature_groups(feature_id["GG"],feature_id["De_Novo"])
-
-
-
-
+		daedalus.utils.compare_feature_groups(feature_id["GG"],feature_id["De_Novo"])
 
 
 if __name__ == "__main__":
