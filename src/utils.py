@@ -16,11 +16,17 @@ from feature_group import feature_group as fg
 from scipy import stats
 import datetime as dt
 import numpy as np
+import os
 
 
 
 Flags = { "Lines": False , "Mean_AC": False,"GG":True,"De_Novo":True}
 Feature_ID = {}
+
+
+		# temp function looking for memory efficiency and object trans. 
+def print_features_table(feature_group,output_path):
+	new_fp = '{}_feature
 
 
 
@@ -42,7 +48,7 @@ def parse_feature_importance_scores(opt):
 		
 		# e is a touple with (feature id, mean accuracy)
 		
-		if "De_Novo" in s[0]:
+		if "New" in s[0]:
 			
 			e = (s[0],eval(s[1]))
 			deNovo.append(e)

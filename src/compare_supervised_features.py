@@ -47,7 +47,12 @@ def main():
 
 	for group in feature_id:
 		if not feature_id[group].isEmpty():
-			feature_id[group].toString()
+			print group
+			doc = open(group+"summary.txt","w")
+			print feature_id[group].toString()
+			doc.write(feature_id[group].toString())
+			doc.close()
+
 			
 	
 	if not feature_id["GG"].isEmpty() and  not feature_id["De_Novo"].isEmpty():

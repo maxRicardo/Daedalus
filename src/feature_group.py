@@ -73,5 +73,12 @@ class feature_group :
 
 		'''
 
-		print __repr.format(self.min(),self.max(),self.mean(),self.variance(),self.st_deviation(),self.kurtosis(),self.skewness())
-
+		return __repr.format(
+			self.min(),
+			self.max(),
+			self.mean(),
+			self.variance(),
+			self.st_deviation(),
+			self.kurtosis(),
+			self.skewness())
+		
