@@ -10,8 +10,6 @@
 # Packages
 *.egg
 *.egg-info
-*.sublime-project
-*.sublime-workspace
 dist
 build
 eggs
@@ -46,3 +44,7 @@ nosetests.xml
 
 # Sphinx builds
 doc/source/generated
+
+#Sublime Worspace 
+*.sublime-project
+*.sublime-workspace

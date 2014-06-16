@@ -1,4 +1,4 @@
-#/usr/bin/python2.7
+#!/usr/bin/env python
 
 # Author : Max R. Berrios Cruz
 # Date : May 30 2014
@@ -26,7 +26,8 @@ Feature_ID = {}
 
 		# temp function looking for memory efficiency and object trans. 
 def print_features_table(feature_group,output_path):
-	new_fp = '{}_feature
+	new_fp = '{}_feature'
+	pass
 
 
 

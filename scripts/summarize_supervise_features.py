@@ -1,10 +1,12 @@
 #!/usr/bin/env python
+
 from __future__ import division
 
 import argparse
 import os
 
 import daedalus.utils
+
 
 ## Script to compare feature in a "feature importance scores" file 
 
@@ -42,7 +44,7 @@ def main():
 	for group in feature_id:
 		if not feature_id[group].isEmpty():
 			print group
-			doc = open(group+"summary.txt","w")
+			doc = open(opt.output_path+"/"+group+"summary.txt","w")
 			print feature_id[group].toString()
 			doc.write(feature_id[group].toString())
 			doc.close()
