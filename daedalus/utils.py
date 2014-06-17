@@ -10,21 +10,19 @@
 # rpy2 for r manipulation from python 
 
 #import rpy2.robjects as ro <---- ready for depr.
+import os
+import datetime as dt
 
 from matplotlib import pylab as plb
-from feature_group import feature_group as fg
 from scipy import stats
-import datetime as dt
 import numpy as np
-import os
+
+from feature_group import feature_group as fg
 
 
 
 Flags = { "Lines": False , "Mean_AC": False,"GG":True,"De_Novo":True}
 Feature_ID = {}
-
-
-
 
 
 
