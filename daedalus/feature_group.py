@@ -9,19 +9,18 @@ from math import sqrt
 
 class feature_group : 
 
-	def __init__(self,group):
+	def __init__(self,group,name):
 		if len(group) is not 0 :
 
 			rep_group = np.asarray(group)
+			self.__name = name
 			self.__features = rep_group[:, 0]
 			self.__scores = np.asarray(rep_group[:, 1] , dtype = "float64")
 			self.__summary = stats.describe(self.__scores)
 			self.__empty = False
 
 		else :
-			print "Empty group presented! "
 			self.__empty = True 
-
 
 
 
@@ -55,25 +54,22 @@ class feature_group :
 	def skewness(self):
 		return self.__summary[4]
 
-	def toString(self):
+	def summary(self):
+		
 		__repr = '''
-			
-			Summary 
-		---------------------------------
-
-		Min 		: {0}
-		Max 		: {1}
-		Mean 		: {2}
-		Variance 	: {3}
-		St.Deviation 	: {4}
-		Kurtosis 	: {5}
-		Skewness 	: {6}
-
-		---------------------------------
-
+	Summary [{}]
+---------------------------------
+Min 		: {}
+Max 		: {}
+Mean 		: {}
+Variance 	: {}
+St.Deviation 	: {}
+Kurtosis 	: {}
+Skewness 	: {}
+---------------------------------
 		'''
-
 		return __repr.format(
+			self.__name,
 			self.min(),
 			self.max(),
 			self.mean(),
@@ -82,3 +78,10 @@ class feature_group :
 			self.kurtosis(),
 			self.skewness())
 		
+	def toString(self):
+		header = 'Feature	Score'
+		temp = '{}	{}'
+		print header
+		for f,s in zip(list(self.__features),list(self.__scores)):
+			print temp.format(f,s)
+		pass

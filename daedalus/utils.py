@@ -24,10 +24,7 @@ Flags = { "Lines": False , "Mean_AC": False,"GG":True,"De_Novo":True}
 Feature_ID = {}
 
 
-		# temp function looking for memory efficiency and object trans. 
-def print_features_table(feature_group,output_path):
-	new_fp = '{}_feature'
-	pass
+
 
 
 
@@ -58,13 +55,13 @@ def parse_feature_importance_scores(opt):
 			e = (s[0],eval(s[1]))
 			GG.append(e)
 
-		if line_counter == opt.features :
+		if line_counter == opt.features or opt.accuracy <= eval(s[1]):
 			break
 			
 	
 	doc.close()
-	Feature_ID["De_Novo"] = fg(deNovo)
-	Feature_ID["GG"] = fg(GG)
+	Feature_ID["De_Novo"] = fg(deNovo,"De_novo")
+	Feature_ID["GG"] = fg(GG,"GG")
 
 	return Feature_ID
 
@@ -88,7 +85,7 @@ def parse_feature_importance_scores(opt):
 
 
 
-def normality_check(feature_group,output_path):
+def normality_check(feature_group,group_name):
 
 	if feature_group.isEmpty():
 		return False
@@ -100,24 +97,17 @@ def normality_check(feature_group,output_path):
 	normaltest = stats.normaltest(feature_group.get_scores())
 
 	temp = '''
-
-			Normality Test P-Values
-		------------------------------------
-		 Kurtosis   |  {0}
-		 Skewness   |  {1}
-		 NormalTest |  {2}
-
-
+  Normality Test P-Values[{}]
+------------------------------------
+Kurtosis   |  {}
+Skewness   |  {}
+NormalTest |  {}
 	'''
 
-	result = temp.format(kr_test[1],sk_test[1],normaltest[1])
-
-	print result
-
-
+	result = temp.format(group_name,kr_test[1],sk_test[1],normaltest[1])
 	tests = (sk_test[1] > 0.05 ,kr_test[1] > 0.05 ,normaltest[1] > 0.05)
 
-	return tests
+	return result,tests
 
 
 
@@ -140,13 +130,6 @@ def compare_feature_groups(fg1,fg2):
 	'''
 	print temp.format(ttest[1])
 	return ttest[1] > 0.05
-
-
-
-
-
-
-
 
 
 
