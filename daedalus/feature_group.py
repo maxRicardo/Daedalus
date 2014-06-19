@@ -14,7 +14,7 @@ class feature_group :
 
 			rep_group = np.asarray(group)
 			self.__name = name
-			self.__features = rep_group[:, 0]
+			self.__features = np.asarray(rep_group[:, 0] , dtype = "str")
 			self.__scores = np.asarray(rep_group[:, 1] , dtype = "float64")
 			self.__summary = stats.describe(self.__scores)
 			self.__empty = False

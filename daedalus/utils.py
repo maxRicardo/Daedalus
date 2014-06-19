@@ -26,14 +26,14 @@ Feature_ID = {}
 
 
 
-def parse_feature_importance_scores(opt):
+def parse_feature_importance_scores(fp,accuracy,features):
 	#opt is a dictionary with all the options given from optget
 	
 	deNovo  = [] 
 	GG = []
 
 
-	doc = open(opt.features_path,"r") # this depends in the formating on optget from the script
+	doc = open(fp,"r") # this depends in the formating on optget from the script
 	doc.readline() # Headers ... not much neaded right now 
 	line_counter = 0
 
@@ -53,7 +53,7 @@ def parse_feature_importance_scores(opt):
 			e = (s[0],eval(s[1]))
 			GG.append(e)
 
-		if line_counter == opt.features or opt.accuracy <= eval(s[1]):
+		if line_counter == features or accuracy <= eval(s[1]):
 			break
 			
 	

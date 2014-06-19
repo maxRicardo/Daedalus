@@ -27,17 +27,19 @@ def parse_arguments():
 
 def main():
 	opt = parse_arguments()
-	feature_id = daedalus.utils.parse_feature_importance_scores(opt)
+	feature_id = daedalus.utils.parse_feature_importance_scores(opt.features_path,opt.accuracy,opt.features)
 	doc = open(opt.output_path+"/summarize_output.txt","w")
 
 	for group in feature_id:
 		if not feature_id[group].isEmpty():
+			normality = daedalus.utils.normality_check(feature_id[group],group)
+
 			if opt.verbose:
 				print feature_id[group].summary()
-				normality = daedalus.utils.normality_check(feature_id[group],group)
 				print normality[0]
 			
 			doc.write(feature_id[group].summary())
+			doc.write(normality[0])
 			doc.write(" ")
 	doc.close()
 
