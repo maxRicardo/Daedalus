@@ -62,8 +62,9 @@ def main():
 			if opt.scale :
 				pass
 			else:
+				os.mkdir(opt.working_path+group)
 				non_scaling(
-					opt.working_path,
+					opt.working_path+group,
 					feature_groups[group],
 					group,
 					opt.units,
@@ -112,7 +113,7 @@ def non_scaling(working_path,feature_group,group_name,units,accuracy,features,ou
 	os.system(filter_command.format(
 		out_table,
 		working_path+"/otu_list.txt",
-		working_path+"filter_non_scale_"+str(units)+"_otu_table.biom"
+		working_path+"_filter_non_scale_"+str(units)+"_otu_table.biom"
 		))
 
 	# run new supervised learning
@@ -120,7 +121,7 @@ def non_scaling(working_path,feature_group,group_name,units,accuracy,features,ou
 	super_command = "qiime supervised_learning.py -i {} -m {} -c {} -o {}"
 
 	os.system(super_command.format(
-		working_path+"filter_non_scale_"+str(units)+"_otu_table.biom",
+		working_path+"_filter_non_scale_"+str(units)+"_otu_table.biom",
 		map_path,
 		category,
 		working_path+"/supervise_results_"+str(units)+"_units"
