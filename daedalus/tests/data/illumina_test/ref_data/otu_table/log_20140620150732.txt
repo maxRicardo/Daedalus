@@ -1,0 +1,176 @@
+Logging started at 15:07:32 on 20 Jun 2014
+QIIME version: 1.8.0
+
+qiime_config values:
+blastmat_dir	/home/ricardo/qiime/blast-2.2.22-release/data
+sc_queue	all.q
+pynast_template_alignment_fp	/home/ricardo/qiime/core_set_aligned.fasta.imputed
+cluster_jobs_fp	/home/ricardo/qiime/qiime-1.8.0-release/bin/start_parallel_jobs.py
+assign_taxonomy_reference_seqs_fp	/home/ricardo/qiime/gg_otus-13_8-release/rep_set/97_otus.fasta
+torque_queue	friendlyq
+template_alignment_lanemask_fp	/home/ricardo/qiime/lanemask_in_1s_and_0s
+jobs_to_start	1
+cloud_environment	False
+qiime_scripts_dir	/home/ricardo/qiime/qiime-1.8.0-release/bin
+denoiser_min_per_core	50
+working_dir	/tmp/
+python_exe_fp	/home/ricardo/qiime/python-2.7.3-release/bin/python
+temp_dir	/tmp/
+blastall_fp	/home/ricardo/qiime/blast-2.2.22-release/bin/blastall
+seconds_to_sleep	60
+assign_taxonomy_id_to_taxonomy_fp	/home/ricardo/qiime/gg_otus-13_8-release/taxonomy/97_otu_taxonomy.txt
+
+parameter file values:
+parallel:jobs_to_start	1
+
+Input file md5 sums:
+seqs.fna: 7abce031b0e3af21a29848482a3df9de
+/home/ricardo/qiime/gg_otus-13_8-release/rep_set/97_otus.fasta: 50b2269712b3738afb41892bed936c29
+
+Forcing --suppress_new_clusters as this is reference-based OTU picking.
+
+Executing commands.
+
+# Pick Reference OTUs command 
+pick_otus.py -i seqs.fna -o otu_table//step1_otus -r /home/ricardo/qiime/gg_otus-13_8-release/rep_set/97_otus.fasta -m uclust_ref  --suppress_new_clusters
+
+Stdout:
+
+Stderr:
+
+# Generate full failures fasta file command 
+filter_fasta.py -f seqs.fna -s otu_table//step1_otus/seqs_failures.txt -o otu_table//step1_otus/failures.fasta
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Pick rep set command 
+pick_rep_set.py -i otu_table//step1_otus/seqs_otus.txt -o otu_table//step1_otus/step1_rep_set.fna -f seqs.fna
+
+Stdout:
+
+Stderr:
+
+# Subsample the failures fasta file using API 
+python -c "import qiime; qiime.util.subsample_fasta('/home/ricardo/Documents/MSSM_Proyect/daedalus/daedalus/tests/data/illumina_test/otu_table/step1_otus/failures.fasta', '/home/ricardo/Documents/MSSM_Proyect/daedalus/daedalus/tests/data/illumina_test/otu_table/step1_otus/subsampled_failures.fasta', '0.001000')
+
+"Forcing --suppress_new_clusters as this is reference-based OTU picking.
+
+Executing commands.
+
+# Pick de novo OTUs for new clusters command 
+pick_otus.py -i otu_table//step1_otus/subsampled_failures.fasta -o otu_table//step2_otus/ -m uclust  --uclust_otu_id_prefix New.ReferenceOTU
+
+Stdout:
+
+Stderr:
+
+# Pick representative set for subsampled failures command 
+pick_rep_set.py -i otu_table//step2_otus//subsampled_failures_otus.txt -o otu_table//step2_otus//step2_rep_set.fna -f otu_table//step1_otus/subsampled_failures.fasta
+
+Stdout:
+
+Stderr:
+
+# Pick reference OTUs using de novo rep set command 
+pick_otus.py -i otu_table//step1_otus/failures.fasta -o otu_table//step3_otus/ -r otu_table//step2_otus//step2_rep_set.fna -m uclust_ref  --suppress_new_clusters
+
+Stdout:
+
+Stderr:
+
+# Create fasta file of step3 failures command 
+filter_fasta.py -f otu_table//step1_otus/failures.fasta -s otu_table//step3_otus//failures_failures.txt -o otu_table//step3_otus//failures_failures.fasta
+
+Stdout:
+
+Stderr:
+
+# Pick de novo OTUs on step3 failures command 
+pick_otus.py -i otu_table//step3_otus//failures_failures.fasta -o otu_table//step4_otus/ -m uclust  --uclust_otu_id_prefix New.CleanUp.ReferenceOTU
+
+Stdout:
+
+Stderr:
+
+# Merge OTU maps command 
+cat otu_table//step1_otus/seqs_otus.txt otu_table//step3_otus//failures_otus.txt otu_table//step4_otus//failures_failures_otus.txt > otu_table//final_otu_map.txt
+
+Stdout:
+
+Stderr:
+
+# Pick representative set for subsampled failures command 
+pick_rep_set.py -i otu_table//step4_otus//failures_failures_otus.txt -o otu_table//step4_otus//step4_rep_set.fna -f otu_table//step3_otus//failures_failures.fasta
+
+Stdout:
+
+Stderr:
+
+# Filter singletons from the otu map using API 
+python -c "import qiime; qiime.filter.filter_otus_from_otu_map('/home/ricardo/Documents/MSSM_Proyect/daedalus/daedalus/tests/data/illumina_test/otu_table/final_otu_map.txt', '/home/ricardo/Documents/MSSM_Proyect/daedalus/daedalus/tests/data/illumina_test/otu_table/final_otu_map_mc2.txt', '2')"
+
+# Write non-singleton otus representative sequences from step1 to the final rep set file: otu_table//rep_set.fna
+
+# Copy the full input refseqs file to the new refseq file
+cp /home/ricardo/qiime/gg_otus-13_8-release/rep_set/97_otus.fasta otu_table//new_refseqs.fna
+
+# Write non-singleton otus representative sequences from step 2 and step 4 to the final representative set and the new reference set (otu_table//rep_set.fna and otu_table//new_refseqs.fna respectively)
+
+Executing commands.
+
+# Make the otu table command 
+make_otu_table.py -i otu_table//final_otu_map_mc2.txt -o otu_table//otu_table_mc2.biom
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Assign taxonomy command 
+assign_taxonomy.py -o otu_table//uclust_assigned_taxonomy -i otu_table//rep_set.fna 
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Add taxa to OTU table command 
+biom add-metadata -i otu_table//otu_table_mc2.biom --observation-metadata-fp otu_table//uclust_assigned_taxonomy/rep_set_tax_assignments.txt -o otu_table//otu_table_mc2_w_tax.biom --sc-separated taxonomy --observation-header OTUID,taxonomy
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+# Align sequences command 
+align_seqs.py -i otu_table//rep_set.fna -o otu_table//pynast_aligned_seqs 
+
+Stdout:
+
+Stderr:
+
+# Filter alignment command 
+filter_alignment.py -o otu_table//pynast_aligned_seqs -i otu_table//pynast_aligned_seqs/rep_set_aligned.fasta 
+
+Stdout:
+
+Stderr:
+
+# Build phylogenetic tree command 
+make_phylogeny.py -i otu_table//pynast_aligned_seqs/rep_set_aligned_pfiltered.fasta -o otu_table//rep_set.tre 
+
+Stdout:
+
+Stderr:
+
+Executing commands.
+
+
+Logging stopped at 15:23:08 on 20 Jun 2014

@@ -17,15 +17,18 @@ class feature_group :
 			self.__features = np.asarray(rep_group[:, 0] , dtype = "str")
 			self.__scores = np.asarray(rep_group[:, 1] , dtype = "float64")
 			self.__summary = stats.describe(self.__scores)
-			self.__empty = False
+			self.__size = len(group)
 
 		else :
-			self.__empty = True 
+			self.__size = 0
 
 
+
+	def size(self):
+		return self.__size
 
 	def isEmpty(self):
-		return self.__empty
+		return self.__size == 0
 
 	def get_features(self):
 		return self.__features
@@ -62,6 +65,7 @@ class feature_group :
 Min 		: {}
 Max 		: {}
 Mean 		: {}
+Counts 		: {}
 Variance 	: {}
 St.Deviation 	: {}
 Kurtosis 	: {}
@@ -73,6 +77,7 @@ Skewness 	: {}
 			self.min(),
 			self.max(),
 			self.mean(),
+			self.size(),
 			self.variance(),
 			self.st_deviation(),
 			self.kurtosis(),

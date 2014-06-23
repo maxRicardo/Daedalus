@@ -1,0 +1,175 @@
+Input file paths
+Mapping filepath: filtered_mapping_l1.txt (md5: 9d6e08e1a5f2688c81d2a24223a8a6cd)
+Sequence read filepath: subsampled_s_1_sequence.fastq (md5: 0f08de517538e5771ee3265ad86ed0c5)
+Barcode read filepath: subsampled_s_1_sequence_barcodes.fastq (md5: 0591b100cc930af6e3a6057361ced966)
+
+Quality filter results
+Total number of input sequences: 52624
+Barcode not in mapping file: 19165
+Read too short after quality truncation: 4642
+Count of N characters exceeds limit: 85
+Illumina quality digit = 0: 0
+Barcode errors exceed max: 944
+
+Result summary (after quality filtering)
+Median sequence length: 133.00
+L1S289	2665
+L1S290	2609
+L1S287	2431
+L1S136	2124
+L1S2	1934
+L1S133	1920
+L1S135	1823
+L1S129	1812
+L1S130	1811
+L1S132	1747
+L1S134	1616
+L1S131	1598
+L1S1	1360
+L1S3	1233
+L1S4	1105
+
+Total number seqs written	27788
+---
+
+Input file paths
+Mapping filepath: filtered_mapping_l2.txt (md5: a116d9e012ef488865733f591fa1e0ba)
+Sequence read filepath: subsampled_s_2_sequence.fastq (md5: 5566ec91d64c25c84ab1e2cc773955e0)
+Barcode read filepath: subsampled_s_2_sequence_barcodes.fastq (md5: 37a342b45789319eb0a9add2fd09b4a7)
+
+Quality filter results
+Total number of input sequences: 52241
+Barcode not in mapping file: 28664
+Read too short after quality truncation: 11017
+Count of N characters exceeds limit: 178
+Illumina quality digit = 0: 0
+Barcode errors exceed max: 622
+
+Result summary (after quality filtering)
+Median sequence length: 128.00
+L2S98	1225
+L2S97	1136
+L2S100	1095
+L2S235	1088
+L2S232	1080
+L2S230	1048
+L2S99	983
+L2S229	972
+L2S233	916
+L2S231	828
+L2S234	784
+L2S236	605
+
+Total number seqs written	11760
+---
+
+Input file paths
+Mapping filepath: filtered_mapping_l3.txt (md5: de9eed472ddcfc3af9c600d99ab075f7)
+Sequence read filepath: subsampled_s_3_sequence.fastq (md5: 81d57d27542e87314691d7046254b095)
+Barcode read filepath: subsampled_s_3_sequence_barcodes.fastq (md5: 89a559104c5ea3d0ee3acc376412c93e)
+
+Quality filter results
+Total number of input sequences: 33403
+Barcode not in mapping file: 25802
+Read too short after quality truncation: 2477
+Count of N characters exceeds limit: 588
+Illumina quality digit = 0: 0
+Barcode errors exceed max: 602
+
+Result summary (after quality filtering)
+Median sequence length: 131.00
+L3S7	318
+L3S9	306
+L3S6	305
+L3S236	292
+L3S371	291
+L3S8	289
+L3S238	285
+L3S369	284
+L3S368	274
+L3S370	273
+L3S367	259
+L3S373	228
+L3S372	205
+L3S235	187
+L3S237	138
+
+Total number seqs written	3934
+---
+
+Input file paths
+Mapping filepath: filtered_mapping_l4.txt (md5: 6f25fb6c06d160447629c460be5b3bb5)
+Sequence read filepath: subsampled_s_4_sequence.fastq (md5: 1106fa4f0d9ad20ba5b50114eccdcdd7)
+Barcode read filepath: subsampled_s_4_sequence_barcodes.fastq (md5: 886700830f411cc56e5983b008d303ab)
+
+Quality filter results
+Total number of input sequences: 45187
+Barcode not in mapping file: 30479
+Read too short after quality truncation: 4798
+Count of N characters exceeds limit: 110
+Illumina quality digit = 0: 0
+Barcode errors exceed max: 756
+
+Result summary (after quality filtering)
+Median sequence length: 131.00
+L4S147	2692
+L4S145	2234
+L4S144	2213
+L4S146	1905
+
+Total number seqs written	9044
+---
+
+Input file paths
+Mapping filepath: filtered_mapping_l5.txt (md5: 3335e45250807279b7b766e935a0e0fa)
+Sequence read filepath: subsampled_s_5_sequence.fastq (md5: 0b48de0f9668df04fa3bc46978098c89)
+Barcode read filepath: subsampled_s_5_sequence_barcodes.fastq (md5: f0e42b8b34ac91512c9ce998d84c5771)
+
+Quality filter results
+Total number of input sequences: 35102
+Barcode not in mapping file: 26966
+Read too short after quality truncation: 1677
+Count of N characters exceeds limit: 831
+Illumina quality digit = 0: 0
+Barcode errors exceed max: 661
+
+Result summary (after quality filtering)
+Median sequence length: 133.00
+L5S100	527
+L5S97	516
+L5S229	511
+L5S232	464
+L5S233	463
+L5S230	447
+L5S98	437
+L5S99	429
+L5S235	415
+L5S231	390
+L5S234	368
+
+Total number seqs written	4967
+---
+
+Input file paths
+Mapping filepath: filtered_mapping_l6.txt (md5: fe499eb0645784ffa2e2bf7d258f5d38)
+Sequence read filepath: subsampled_s_6_sequence.fastq (md5: f04ccf6a36802417c225b4ca39e5ebdb)
+Barcode read filepath: subsampled_s_6_sequence_barcodes.fastq (md5: 2df29d1a0e71eb3fb64463030d68e03f)
+
+Quality filter results
+Total number of input sequences: 38990
+Barcode not in mapping file: 26805
+Read too short after quality truncation: 2728
+Count of N characters exceeds limit: 133
+Illumina quality digit = 0: 0
+Barcode errors exceed max: 628
+
+Result summary (after quality filtering)
+Median sequence length: 133.00
+L6S103	2403
+L6S102	2226
+L6S101	2052
+L6S100	2015
+
+Total number seqs written	8696
+---
+
