@@ -1,2 +1,0 @@
-New.ReferenceOTU0	L2S232_38470
-New.ReferenceOTU1	L1S287_21070
