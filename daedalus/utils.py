@@ -109,24 +109,24 @@ NormalTest |  {}
 
 
 
-def compare_feature_groups(fg1,fg2):
+def compare_feature_groups(fg1,fg2,variance=False,name='Comparison'):
 
-	if fg1.variance() == fg2.variance():
-		ttest = stats.ttest_ind(fg1.get_scores(),fg2.get_scores())
+	if variance:
+		ttest = stats.ttest_ind(fg1,fg2)
 		print "Equal Variance "
 
 	else :
-		ttest = stats.ttest_ind(fg1.get_scores(),fg2.get_scores(),equal_var = False)
+		ttest = stats.ttest_ind(fg1,fg2,equal_var = False)
 		print "Different Variance"
 
 	temp = '''
 
-		T-test Results 
+		T-test Results[{1}]
 	---------------------------
 	P value   |    {0}
 
 	'''
-	print temp.format(ttest[1])
+	print temp.format(ttest[1],name)
 	return ttest[1] > 0.05
 
 
