@@ -119,14 +119,20 @@ def compare_feature_groups(fg1,fg2,variance=False,name='Comparison'):
 		ttest = stats.ttest_ind(fg1,fg2,equal_var = False)
 		print "Different Variance"
 
+	ktest = stats.kruskal(fg1,fg2)
+
 	temp = '''
 
-		T-test Results[{1}]
-	---------------------------
-	P value   |    {0}
+	Stats Comparsion [{1}]
+	----------------------------------------------
+	Tests 	  |	P-Value
+	----------------------------------------------
+	Student-T   |    {0}
+	Kruskal     |    {2}
+
 
 	'''
-	print temp.format(ttest[1],name)
+	print temp.format(ttest[1],name,ktest[1])
 	return ttest[1] > 0.05
 
 

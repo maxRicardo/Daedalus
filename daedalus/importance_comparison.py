@@ -5,6 +5,7 @@
 import shutil as sh
 import os
 
+import numpy as np
 
 import utils as du
 '''
@@ -91,39 +92,43 @@ def inside_group_comparison(working_path,feature_group,group_name,units,accuracy
 
 
 
-def seq_type_group_comparison(features_set,otu_table,map_path,category,accuracy,features,working_path):
+def group_set_comparison(features_set,otu_table,map_path,category,accuracy,features,working_path):
 
 	#making docs for otu elimination
 
+	os.mkdir(working_path+"/filter_list")
+
 	doc1 = open(working_path+"/filter_list/no_denovo_otus.txt","w")
 	for i in features_set["De_Novo"].get_features():
-		doc1.write(str(i))
+		doc1.write(str(i)+"\n")
 	doc1.close()
 
-	doc2 = open(working_path+"filter_list/no_refseq_otus.txt","w")
+	doc2 = open(working_path+"/filter_list/no_refseq_otus.txt","w")
 	for i in features_set["GG"].get_features():
-		doc2.write(str(i))
+		doc2.write(str(i)+"\n")
 	doc2.close()
 
 
 	#filter out otu features
-
+	
 	otu_filter_command = "qiime filter_otus_from_otu_table.py -i {} -e {} -o {}"
+	
+	os.mkdir(working_path+"/filter_otus")
 
 	## making denovo filtered 
 
-	os.system(otu_filter_command(
+	os.system(otu_filter_command.format(
 		otu_table,
-		working_path+"filter_list/no_denovo_otus.txt",
-		working_path+"filter_otus/no_denovo_otu_table.biom"
+		working_path+"/filter_list/no_denovo_otus.txt",
+		working_path+"/filter_otus/no_denovo_otu_table.biom"
 		))
 
 	##making refseq filtered 
 
-	os.system(otu_filter_command(
+	os.system(otu_filter_command.format(
 		otu_table,
-		working_path+"filter_list/no_refseq_otus.txt",
-		working_path+"filter_otus/no_refseq_otu_table.biom"
+		working_path+"/filter_list/no_refseq_otus.txt",
+		working_path+"/filter_otus/no_refseq_otu_table.biom"
 		))
 
 
@@ -132,7 +137,7 @@ def seq_type_group_comparison(features_set,otu_table,map_path,category,accuracy,
 
 	##supervised with no-denovo
 	os.system(supervised_command.format(
-		working_path+"filter_otus/no_denovo_otu_table.biom",
+		working_path+"/filter_otus/no_denovo_otu_table.biom",
 		map_path,
 		category,
 		working_path+"/no_denovo_supervised"
@@ -140,7 +145,7 @@ def seq_type_group_comparison(features_set,otu_table,map_path,category,accuracy,
 
 	## supervised with no_refseq
 	os.system(supervised_command.format(
-		working_path+"filter_otus/no_refseq_otu_table.biom",
+		working_path+"/filter_otus/no_refseq_otu_table.biom",
 		map_path,
 		category,
 		working_path+"/no_refseq_supervised"
@@ -150,30 +155,33 @@ def seq_type_group_comparison(features_set,otu_table,map_path,category,accuracy,
 
 
 	no_denovo_feaure_set = du.parse_feature_importance_scores(
-		working_path+"/no_denovo_supervised/features_importance_scores.txt",
+		working_path+"/no_denovo_supervised/feature_importance_scores.txt",
 		accuracy,
 		features
 		)
 
 	no_refseq_feaure_set = du.parse_feature_importance_scores(
-		working_path+"/no_refseq_supervised/features_importance_scores.txt",
+		working_path+"/no_refseq_supervised/feature_importance_scores.txt",
 		accuracy,
 		features
 		)
 
 	#making full set !
+
+	print features_set["GG"].summary()
+
 	features_full_scores = np.concatenate((
 		features_set["De_Novo"].get_scores(),
-		feature_group["GG"].get_scores()
+		features_set["GG"].get_scores()
 		))
-	feature_full_scores_variance = np.variance(features_full_scores)
+	feature_full_scores_variance = np.var(features_full_scores)
 
 
 
 	du.compare_feature_groups(
 		no_denovo_feaure_set["GG"].get_scores(),
 		features_full_scores,
-		no_denovo_feaure_set["GG"].variance() == features_full_scores_variance,
+		no_denovo_feaure_set["GG"].variance() == feature_full_scores_variance,
 		"No De-Novo vs Full Feature Set"
 		)
 
@@ -181,7 +189,7 @@ def seq_type_group_comparison(features_set,otu_table,map_path,category,accuracy,
 	du.compare_feature_groups(
 		no_refseq_feaure_set["De_Novo"].get_scores(),
 		features_full_scores,
-		no_refseq_feaure_set["De_Novo"].variance() == features_full_scores_variance,
+		no_refseq_feaure_set["De_Novo"].variance() == feature_full_scores_variance,
 		"No GG vs Full Feature Set"
 		)
 
