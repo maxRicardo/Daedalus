@@ -108,6 +108,7 @@ def group_set_comparison(features_set,otu_table,map_path,category,accuracy,featu
 		doc2.write(str(i)+"\n")
 	doc2.close()
 
+	
 
 	#filter out otu features
 	
@@ -131,6 +132,7 @@ def group_set_comparison(features_set,otu_table,map_path,category,accuracy,featu
 		working_path+"/filter_otus/no_refseq_otu_table.biom"
 		))
 
+	
 
 	#making new supervised features run 
 	supervised_command = "qiime supervised_learning.py -i {} -m {} -c {} -o {}"
@@ -152,13 +154,14 @@ def group_set_comparison(features_set,otu_table,map_path,category,accuracy,featu
 		))
 
 	#Parse feature set per system 
-
+	
 
 	no_denovo_feaure_set = du.parse_feature_importance_scores(
 		working_path+"/no_denovo_supervised/feature_importance_scores.txt",
 		accuracy,
 		features
 		)
+	
 
 	no_refseq_feaure_set = du.parse_feature_importance_scores(
 		working_path+"/no_refseq_supervised/feature_importance_scores.txt",
@@ -168,12 +171,11 @@ def group_set_comparison(features_set,otu_table,map_path,category,accuracy,featu
 
 	#making full set !
 
-	print features_set["GG"].summary()
-
 	features_full_scores = np.concatenate((
 		features_set["De_Novo"].get_scores(),
 		features_set["GG"].get_scores()
 		))
+
 	feature_full_scores_variance = np.var(features_full_scores)
 
 

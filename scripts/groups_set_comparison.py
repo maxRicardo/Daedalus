@@ -50,11 +50,7 @@ def main():
 	else:
 		raise OSError(" File already exist!")
 
-	for i in feature_groups.itervalues():
-		i.toString()
-		print "Ended"
-
-	raw_input("Hit key to continue")
+	
 
 	ic.group_set_comparison(
 		feature_groups,

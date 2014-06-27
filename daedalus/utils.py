@@ -9,7 +9,7 @@
 
 # rpy2 for r manipulation from python 
 
-#import rpy2.robjects as ro <---- ready for depr.
+
 import os
 import datetime as dt
 
@@ -31,6 +31,7 @@ def parse_feature_importance_scores(fp,accuracy,features):
 	
 	deNovo  = [] 
 	GG = []
+	Feature_ID = {}
 
 
 	doc = open(fp,"r") # this depends in the formating on optget from the script
@@ -111,28 +112,23 @@ NormalTest |  {}
 
 def compare_feature_groups(fg1,fg2,variance=False,name='Comparison'):
 
-	if variance:
-		ttest = stats.ttest_ind(fg1,fg2)
-		print "Equal Variance "
-
-	else :
-		ttest = stats.ttest_ind(fg1,fg2,equal_var = False)
-		print "Different Variance"
-
+	ttest = stats.ttest_ind(fg1,fg2,equal_var = variance)
 	ktest = stats.kruskal(fg1,fg2)
+	rktest = stats.ranksums(fg1,fg2)
 
 	temp = '''
 
-	Stats Comparsion [{1}]
-	----------------------------------------------
-	Tests 	  |	P-Value
-	----------------------------------------------
-	Student-T   |    {0}
-	Kruskal     |    {2}
+Stats Comparsion [{1}]
+----------------------------------------------
+Tests 	  |	P-Value
+----------------------------------------------
+Student-T   |    {0}
+Kruskal     |    {2}
+RankSum     |    {3}
 
 
 	'''
-	print temp.format(ttest[1],name,ktest[1])
+	print temp.format(ttest[1],name,ktest[1],rktest[1])
 	return ttest[1] > 0.05
 
 
