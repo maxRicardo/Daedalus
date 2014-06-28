@@ -201,3 +201,48 @@ def group_set_comparison(features_set,otu_table,map_path,category,accuracy,featu
 
 
 	return
+
+# inverse of inside comparison. Will leave just a {units} group and filter the other subset from otu_table
+# then re-run the comparison to see if group is demonstrative of the sample 
+
+def determine_significant_subset(working_path,feature_group,group_name,units,accuracy,features,otu_table,map_path,category):
+
+	to_filter_otus = working_path+"/filter_"+group_name+"_otu.txt"
+	filtered_otu = working_path+"/otu_"+group_name+"_filter_to_"+str(units)+".biom"
+	supervised_dir = working_path+"/"+group_name+"supervised_filter_to_"+str(units)
+
+	otu_filter_command = "qiime filter_otus_from_otu_table.py -i {} -e {} -o {}"
+	supervised_command = "qiime supervised_learning.py -i {} -m {} -c {} -o {}"
+
+	doc = open(to_filter_otus,"w")
+	for i in feature_group.get_features()[units:]:
+		doc.write(i+"\n")
+	doc.close()
+
+	os.system(otu_filter_command.format(
+		otu_table,
+		to_filter_otus,
+		filtered_otu
+		))
+
+	os.system(supervised_command.format(
+		otu_table,
+		map_path,
+		category,
+		supervised_dir
+		))
+
+	new_feature_set = du.parse_feature_importance_scores(
+		supervised_dir+"/feature_importance_scores.txt",
+		accuracy,
+		features
+		)
+
+
+	du.compare_feature_groups(
+		feature_group.get_scores(),
+		new_feature_set[group_name].get_scores(),
+		feature_group.variance() == new_feature_set[group_name].variance(),
+		str(units)+"_"+group_name+"_representative_comparison"
+		)
+	pass

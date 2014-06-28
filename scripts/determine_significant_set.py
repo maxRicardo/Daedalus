@@ -64,7 +64,7 @@ def main():
 				pass
 			else:
 				os.mkdir(opt.working_path+"/"+group)
-				ic.inside_group_comparison(
+				ic.determine_significant_subset(
 					opt.working_path+"/"+group,
 					feature_groups[group],
 					group,
