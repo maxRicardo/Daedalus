@@ -99,12 +99,12 @@ def group_set_comparison(features_set,otu_table,map_path,category,accuracy,featu
 	os.mkdir(working_path+"/filter_list")
 
 	doc1 = open(working_path+"/filter_list/no_denovo_otus.txt","w")
-	for i in features_set["De_Novo"].get_features():
+	for i in features_set["de_novo"].get_features():
 		doc1.write(str(i)+"\n")
 	doc1.close()
 
 	doc2 = open(working_path+"/filter_list/no_refseq_otus.txt","w")
-	for i in features_set["GG"].get_features():
+	for i in features_set["id_ref"].get_features():
 		doc2.write(str(i)+"\n")
 	doc2.close()
 
@@ -171,35 +171,31 @@ def group_set_comparison(features_set,otu_table,map_path,category,accuracy,featu
 
 	#making full set !
 
-	features_full_scores = np.concatenate((
-		features_set["De_Novo"].get_scores(),
-		features_set["GG"].get_scores()
-		))
+	features_full_scores = features_set["full_set"].get_scores()
 
-	feature_full_scores_variance = np.var(features_full_scores)
-
+	feature_full_scores_variance = features_set["full_set"].variance()
 
 
 	du.compare_feature_groups(
-		no_denovo_feaure_set["GG"].get_scores(),
+		no_denovo_feaure_set["id_ref"].get_scores(),
 		features_full_scores,
-		no_denovo_feaure_set["GG"].variance() == feature_full_scores_variance,
+		no_denovo_feaure_set["id_ref"].variance() == feature_full_scores_variance,
 		"No De-Novo vs Full Feature Set"
 		)
 
 
 	du.compare_feature_groups(
-		no_refseq_feaure_set["De_Novo"].get_scores(),
+		no_refseq_feaure_set["de_novo"].get_scores(),
 		features_full_scores,
-		no_refseq_feaure_set["De_Novo"].variance() == feature_full_scores_variance,
-		"No GG vs Full Feature Set"
+		no_refseq_feaure_set["de_novo"].variance() == feature_full_scores_variance,
+		"No id_ref vs Full Feature Set"
 		)
 
 	du.compare_feature_groups(
-		no_denovo_feaure_set["GG"].get_scores(),
-		no_refseq_feaure_set["De_Novo"].get_scores(),
-		no_refseq_feaure_set["De_Novo"].variance() == no_denovo_feaure_set["GG"].variance(),
-		"No-denovo vs No GG"
+		no_denovo_feaure_set["id_ref"].get_scores(),
+		no_refseq_feaure_set["de_novo"].get_scores(),
+		no_refseq_feaure_set["de_novo"].variance() == no_denovo_feaure_set["id_ref"].variance(),
+		"No-denovo vs No id_ref"
 		)
 
 

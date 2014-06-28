@@ -21,17 +21,13 @@ from feature_group import feature_group as fg
 
 
 
-Flags = { "Lines": False , "Mean_AC": False,"GG":True,"De_Novo":True}
-Feature_ID = {}
-
-
 
 def parse_feature_importance_scores(fp,accuracy,features):
 	#opt is a dictionary with all the options given from optget
 	
-	deNovo  = [] 
-	GG = []
-	Feature_ID = {}
+	de_novo = [] 
+	id_ref = []
+	feature_set = {}
 
 
 	doc = open(fp,"r") # this depends in the formating on optget from the script
@@ -48,34 +44,34 @@ def parse_feature_importance_scores(fp,accuracy,features):
 		if "New" in s[0]:
 			
 			e = (s[0],eval(s[1]))
-			deNovo.append(e)
+			de_novo.append(e)
 		else:
 			
 			e = (s[0],eval(s[1]))
-			GG.append(e)
+			id_ref.append(e)
 
 		if line_counter == features or accuracy <= eval(s[1]):
 			break
 			
 	
 	doc.close()
-	Feature_ID["De_Novo"] = fg(deNovo,"De_novo")
-	Feature_ID["GG"] = fg(GG,"GG")
+	feature_set["de_novo"] = fg(de_novo,"de_novo")
+	feature_set["id_ref"] = fg(id_ref,"id_ref")
+	feature_set["full_set"] = fg(id_ref+de_novo,"full_set")
 
-	return Feature_ID
+	return feature_set
 
 
 	# dict returning the divided parse of features and their respective mean accuracy
 	
 	##### DATA STRUCT
-	## feature_id { 
-	#				GG : object [ feature_group ], 
-	#				De_Novo : object [feature_group]
-	#			  }
+	## 	 feature_set 
+	#			{
+	#				id_ref  : object [feature_group], 
+	#				de_novo : object [feature_group],
+	#				full_set: object [feature_group]
+	#			 }
 	
-	
-	
-	## R Summary from both of the features group as std.out
 
 
 ## Method runs different normality test and return 
@@ -156,18 +152,18 @@ def make_html_report(output_path):
 	"""
 
 
-	GG_image = """
+	id_ref_image = """
 
-	<!-- Image content for GG -->
+	<!-- Image content for id_ref -->
 
 	<div align="center">
 	<em>Green Gene Summary Behavior</em><br>
-	<img src = {gg_image} alt = "gg graphs" width = "480" height = "480" border = "1">
+	<img src = {id_ref_image} alt = "id_ref graphs" width = "480" height = "480" border = "1">
 	</div><br>
 
 	"""
 
-	De_Novo_image = """
+	de_novo_image = """
 
 	<!-- Image content for the De NOVO -->
 
@@ -185,19 +181,19 @@ def make_html_report(output_path):
 
 	"""
 
-	if Flags["GG"]:
-		full_page = page_head+GG_image
+	if Flags["id_ref"]:
+		full_page = page_head+id_ref_image
 
-	if Flags["De_Novo"]:
-		full_page = full_page+De_Novo_image
+	if Flags["de_novo"]:
+		full_page = full_page+de_novo_image
 
 	full_page = full_page+page_tail
 
 
 
 
-	gg_image = '"GG_summary.jpeg"'
-	de_novo_image = '"De_Novo_summary.jpeg"'
+	id_ref_image = '"id_ref_summary.jpeg"'
+	de_novo_image = '"de_novo_summary.jpeg"'
 	dte = dt.date.today()
 	date = dte.strftime("%A %B %Y")
 
