@@ -123,5 +123,36 @@ RankSum     |    {3}
 	return ttest[1] > 0.05
 
 
+def quantify_by_occurence(features_path_list,accuracy,units,type):
+	quan_table = {}
+
+	for f_path in features_path_list:
+		feature_set = parse_feature_importance_scores(
+			f_path,
+			accuracy,
+			units
+			)
+
+		for f,s in zip(feature_set[type].get_features(),feature_set[type].get_scores()):
+			if len(quan_table) == 0:
+				quan_table[f] = 1
+			elif f in quan_table.keys():
+				quan_table[f] += quan_table[f]
+
+	quan_table["total"] = len(features_path_list)
+	return quan_table
 
 
+def quantify_occurences_through_table(features_path_list,accuracy,features,type = "full_set",working_path):
+	quant_table = quantify_by_occurence(features_path_list,accuracy,features,working_path)
+	header = "feature occurence	percentege\n"
+	templ = "{} {} {}\n"
+
+	doc = open(working_path+"/quntification_table_"+str(units)"_units.txt","w")
+	doc.write(header)
+
+	for f,o in quant_table.iteritems():
+		doc.write(templ.format(f,o,o/len(features_path_list)))
+
+	doc.close()
+	pass
