@@ -5,11 +5,6 @@
 # Parser for feature_importance_score 
 
 
-## ---> Under work to change from R implementation with rpy2 packages to Numpy Scipy and Matplot lib 
-
-# rpy2 for r manipulation from python 
-
-
 import os
 import datetime as dt
 
@@ -128,78 +123,5 @@ RankSum     |    {3}
 	return ttest[1] > 0.05
 
 
-
-
-def make_html_report(output_path):
-	import datetime as dt
-
-	page_head = """
-	<html>
-	<head>
-	<title>Daedalus Report</title> 
-	</head>
-
-	<body>
-
-	<h1 align= "center">Graph Reports From Supervised Learning </h1>
-	<p> 
-	Author : Max R. Berrios Cruz<br>
-	email : max.berrios@upr.edu<br>
-	Date : {date}<br>
-	</p>
-
-
-	"""
-
-
-	id_ref_image = """
-
-	<!-- Image content for id_ref -->
-
-	<div align="center">
-	<em>Green Gene Summary Behavior</em><br>
-	<img src = {id_ref_image} alt = "id_ref graphs" width = "480" height = "480" border = "1">
-	</div><br>
-
-	"""
-
-	de_novo_image = """
-
-	<!-- Image content for the De NOVO -->
-
-	<div align="center">
-	<em>De Novo Summary Behavior</em><br>
-	<img src = {de_novo_image} alt = "de-novo graphs" width = "480" height = "480" border = "1">
-	</div>
-	"""
-
-	page_tail = """
-
-	</body>
-
-	</html>
-
-	"""
-
-	if Flags["id_ref"]:
-		full_page = page_head+id_ref_image
-
-	if Flags["de_novo"]:
-		full_page = full_page+de_novo_image
-
-	full_page = full_page+page_tail
-
-
-
-
-	id_ref_image = '"id_ref_summary.jpeg"'
-	de_novo_image = '"de_novo_summary.jpeg"'
-	dte = dt.date.today()
-	date = dte.strftime("%A %B %Y")
-
-	## Creating the html perse!
-	doc = open(output_path+"/daedalus_report.html","w")
-	doc.write(full_page.format(**locals()))
-	doc.close()
 
 
