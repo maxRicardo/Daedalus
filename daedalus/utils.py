@@ -123,12 +123,21 @@ RankSum     |    {3}
 	return ttest[1] > 0.05
 
 
-def quantify_by_occurence(features_path_list,accuracy,units,type):
+
+'''
+This method quantifies the number of occurences of a group of features 
+based on a list of file path given as arguments. The idea is to make a 
+table to summarize this number of occurences through a dictionary using 
+just telling the number of times it was seen in N first positions of the 
+simulation.
+'''
+
+def quantify_by_occurence(features_path,features_files_list,accuracy,units,type):
 	quan_table = {}
 
 	for f_path in features_path_list:
 		feature_set = parse_feature_importance_scores(
-			f_path,
+			features_path+"/"+f_path,
 			accuracy,
 			units
 			)
@@ -141,10 +150,16 @@ def quantify_by_occurence(features_path_list,accuracy,units,type):
 
 	quan_table["total"] = len(features_path_list)
 	return quan_table
+'''
+This method takes from the quantify_by_occurence , the results which is a 
+dictionary of features and ocurrences of the features through the list of files
+given as argument, and presents it into a document output for testing and graphics 
+purposes. 
 
+'''
 
-def quantify_occurences_through_table(features_path_list,accuracy,features,type = "full_set",working_path):
-	quant_table = quantify_by_occurence(features_path_list,accuracy,features,working_path)
+def quantify_occurences_through_table(features_path,features_files_list,accuracy,features,type = "full_set",working_path):
+	quant_table = quantify_by_occurence(features_path,features_files_list,accuracy,features,working_path)
 	header = "feature occurence	percentege\n"
 	templ = "{} {} {}\n"
 
@@ -155,4 +170,5 @@ def quantify_occurences_through_table(features_path_list,accuracy,features,type 
 		doc.write(templ.format(f,o,o/len(features_path_list)))
 
 	doc.close()
+	
 	pass
