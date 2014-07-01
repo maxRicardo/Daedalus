@@ -46,6 +46,8 @@ def parse_feature_importance_scores(fp,accuracy,features):
 			id_ref.append(e)
 
 		if line_counter == features or accuracy <= eval(s[1]):
+			print "Stoping at : {} Lines of Features".format(line_counter)
+			raw_input(" ")
 			break
 			
 	
@@ -132,24 +134,30 @@ just telling the number of times it was seen in N first positions of the
 simulation.
 '''
 
-def quantify_by_occurence(features_path,features_files_list,accuracy,units,type):
+def quantify_by_occurence(features_path,features_files_list,accuracy,features,group):
 	quan_table = {}
 
-	for f_path in features_path_list:
+	for f_path in features_files_list:
+		
 		feature_set = parse_feature_importance_scores(
 			features_path+"/"+f_path,
 			accuracy,
-			units
+			features
 			)
+		
 
-		for f,s in zip(feature_set[type].get_features(),feature_set[type].get_scores()):
+
+		for f,s in zip(feature_set[group].get_features(),feature_set[group].get_scores()):
 			if len(quan_table) == 0:
 				quan_table[f] = 1
 			elif f in quan_table.keys():
-				quan_table[f] += quan_table[f]
+				quan_table[f] += 1
+			else:
+				quan_table[f] = 1
 
-	quan_table["total"] = len(features_path_list)
+	quan_table["total"] = len(features_files_list)
 	return quan_table
+
 '''
 This method takes from the quantify_by_occurence , the results which is a 
 dictionary of features and ocurrences of the features through the list of files
@@ -158,16 +166,16 @@ purposes.
 
 '''
 
-def quantify_occurences_through_table(features_path,features_files_list,accuracy,features,type = "full_set",working_path):
-	quant_table = quantify_by_occurence(features_path,features_files_list,accuracy,features,working_path)
-	header = "feature occurence	percentege\n"
-	templ = "{} {} {}\n"
+def quantify_occurences_through_table(features_path,features_files_list,accuracy,features,working_path,group = "full_set"):
+	quant_table = quantify_by_occurence(features_path,features_files_list,accuracy,features,group)
+	header = "feature\toccurence\tpercentege\n"
+	templ = "{}\t{}\t{}\n"
 
-	doc = open(working_path+"/quntification_table_"+str(units)"_units.txt","w")
+	doc = open(working_path+"/quntification_table_"+str(features)+"_units.txt","w")
 	doc.write(header)
 
 	for f,o in quant_table.iteritems():
-		doc.write(templ.format(f,o,o/len(features_path_list)))
+		doc.write(templ.format(f,o,str(o/len(features_files_list))))
 
 	doc.close()
 	

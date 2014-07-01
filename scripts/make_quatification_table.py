@@ -1,4 +1,4 @@
-#!/usr/bin/python env
+#!/usr/bin/env python 
 
 from __future__ import division
 
@@ -49,7 +49,7 @@ def main():
 			os.listdir(opt.features_path),
 			opt.accuracy,
 			opt.features,
-			working_path=opt.working_path
+			opt.working_path
 			)
 	elif type([]) is type(opt.features_path.split(",")):
 		du.quantify_occurences_through_table(
@@ -57,8 +57,11 @@ def main():
 			opt.features_path.split(","),
 			opt.accuracy,
 			opt.features,
-			working_path=opt.working_path
+			opt.working_path
 			)
 	else:
 		raise OSError( " Dude! you are not giving me a list of files or a folder path!")
-		
+
+
+if __name__ == "__main__":
+	main()
