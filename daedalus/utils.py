@@ -46,8 +46,6 @@ def parse_feature_importance_scores(fp,accuracy,features):
 			id_ref.append(e)
 
 		if line_counter == features or accuracy <= eval(s[1]):
-			print "Stoping at : {} Lines of Features".format(line_counter)
-			raw_input(" ")
 			break
 			
 	
