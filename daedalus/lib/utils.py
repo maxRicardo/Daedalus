@@ -17,7 +17,19 @@ from feature_group import feature_group as fg
 
 
 def parse_supervised_summary(fp):
-	pass
+	doc = open(fp,"r")
+	sum_dir = {}
+
+	for line in doc:
+		if 'Estimated error' in line:
+			sum_dir["estimated_error"] = line.split("\t")[2] 
+		if 'Baseline error' in line:
+			sum_dir["baseline_error"] = line.split("\t")[2]
+		if 'Ratio baseline error to observed error' in line:
+			sum_dir["ratio"] = line.split("\t")[6]
+
+
+	return sum_dir
 
 
 def parse_feature_importance_scores(fp,accuracy,features):
