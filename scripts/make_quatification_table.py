@@ -6,7 +6,7 @@ import argparse
 import os 
 import shutil as sh
 
-import daedalus.utils as du
+import daedalus.lib.utils as du
 
 #make_quantification_table
 
@@ -51,6 +51,7 @@ def main():
 			opt.features,
 			opt.working_path
 			)
+		
 	elif type([]) is type(opt.features_path.split(",")):
 		du.quantify_occurences_through_table(
 			".",

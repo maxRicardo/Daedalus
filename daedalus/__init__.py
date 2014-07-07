@@ -2,9 +2,8 @@
 
 
 __all__ = [
-'feature_group',
-'utils',
-'importance_comparison',
+'graphs',
+'lib',
 'tests'
 ]
 

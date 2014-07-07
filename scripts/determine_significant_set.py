@@ -9,8 +9,8 @@ import argparse
 import os
 import shutil as sh
 
-import daedalus.utils as du
-import daedalus.importance_comparison as ic
+import daedaluslib.utils as du
+import daedaluslib.importance_comparison as ic
 
 
 def parse_argument():

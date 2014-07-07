@@ -5,7 +5,7 @@ from __future__ import division
 import argparse
 import os
 
-import daedalus.utils
+import daedalus.lib.utils
 
 
 ## Script to compare feature in a "feature importance scores" file 

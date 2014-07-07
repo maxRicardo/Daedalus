@@ -6,7 +6,7 @@ import argparse
 import os 
 import shutil as sh
 
-import daedalus.utils as du
+import daedalus.lib.utils as du
 
 #categorize_groups
 
