@@ -6,11 +6,13 @@
 
 
 import os
+import shutil as sh
 import datetime as dt
 
 from matplotlib import pylab as plb
 from scipy import stats
 import numpy as np
+from biom.parse import parse_biom_table as pbt
 
 from feature_group import feature_group as fg
 
@@ -82,6 +84,60 @@ def parse_feature_importance_scores(fp,accuracy,features):
 	#				full_set: object [feature_group]
 	#			 }
 	
+
+
+
+def filter_biom_by_de_novo(otu_table_p,output_p):
+	os.mkdir(output_p)
+
+
+	idref = []
+	dnovo = []
+
+	biom_table = pbt(open(otu_table_p,"U"))
+
+	#determine filtering objects
+	for obj in biom_table.ObservationIds:
+		if "New" in obj:
+			dnovo.append(obj)
+		else:
+			idref.append(obj)
+
+	os.mkdir(output_p+"/filters")
+
+	#make filter for the otus
+	filter_dnovo = open(output_p+'/filters/filter_dnovo.txt','w')
+	filter_idref = open(output_p+'/filters/filter_idref.txt','w') 
+
+	for feature in dnovo:
+		filter_dnovo.write(feature+"\n")
+	filter_dnovo.close()
+
+	for feature in idref:
+		filter_idref.write(feature+'\n')
+	filter_idref.close()
+
+	#filtering the otus
+
+	os.mkdir(output_p+'/otus')
+	filter_otu_command = "qiime filter_otus_from_otu_table.py -i {} -e {} -o {}"
+
+	os.system(filter_otu_command.format(
+		otu_table_p,
+		output_p+'/filters/filter_idref.txt',
+		output_p+'/otus/de_novo_otu_table.biom'
+		))
+	os.system(filter_otu_command.format(
+		otu_table_p,
+		output_p+'/filters/filter_dnovo.txt',
+		output_p+'/otus/id_ref_otu_table.biom'
+		))
+
+	dnovo_p = output_p+'/otus/de_novo_otu_table.biom'
+	idref_p = output_p+'/otus/id_ref_otu_table.biom'
+
+	return dnovo_p,idref_p
+
 
 
 ## Method runs different normality test and return 
