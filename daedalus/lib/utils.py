@@ -13,7 +13,10 @@ from matplotlib import pylab as plb
 from scipy import stats
 import numpy as np
 from biom.parse import parse_biom_table as pbt
+from biom.util import compute_counts_per_sample_stats as biom_stats
 from qiime.filter import filter_otus_from_otu_table as filter_otus
+from qiime.filter import filter_samples_from_otu_table as filter_samples
+
 from qiime.format import format_biom_table
 
 from feature_group import feature_group as fg
@@ -108,7 +111,7 @@ def filter_biom_by_de_novo(otu_table_p,output_p):
 
 	filters = {'id_ref':dnovo , 'de_novo':idref}
 
-	#make filter for the otus
+	#make filter for the otus { this filter are here just for debugging purpose. Can be removed anytime }
 	filter_dnovo = open(output_p+'/filters/filter_dnovo.txt','w')
 	filter_idref = open(output_p+'/filters/filter_idref.txt','w') 
 
@@ -123,7 +126,6 @@ def filter_biom_by_de_novo(otu_table_p,output_p):
 	#filtering the otus
 
 	os.mkdir(output_p+'/otus')
-	#filter_otu_command = "qiime filter_otus_from_otu_table.py -i {} -e {} -o {}"
 
 	for table_name,otus_to_filter in filters.iteritems():
 		otus_to_keep = set(biom_table.ObservationIds)
@@ -142,9 +144,6 @@ def filter_biom_by_de_novo(otu_table_p,output_p):
 		output_table.close()
 
 	return 
-
-
-
 
 
 
@@ -282,3 +281,32 @@ def quantify_occurences_through_table(features_path,features_files_list,accuracy
 
 
 
+def subset_samples_by_seq_number(otu_table,seq_number):
+	otu_table_stats = biom_stats(otu_table)
+	new_sample_set =set()
+	for sample,count in otu_table_stats[-1].iteritems():
+		if count > seq_number:
+			new_sample_set.add(sample)
+
+	return new_sample_set
+
+
+def determine_sample_eveness_for_tables(ref_table,de_novo_table,seq_number,output_p):
+
+	sample_de_novo = subset_samples_by_seq_number(de_novo_table,seq_number)
+	sample_ref = subset_samples_by_seq_number(ref_table,seq_number)
+	common_sample_ids = sample_de_novo.intersection(sample_ref)
+
+	#filtering from otu table 
+	new_ref_table = filter_samples(ref_table,common_sample_ids,0,np.inf)
+	new_de_novo_table = filter_samples(de_novo_table,common_sample_ids,0,np.inf)
+	
+	doc1 = open(output_p+'/id_ref_equalized_samples_number_'+str(seq_number)+'.biom',"w")
+	doc1.write(format_biom_table(new_ref_table))
+	doc1.close()
+
+	doc2 = open(output_p+'/de_novo_equalized_samples_number_'+str(seq_number)+'.biom',"w")
+	doc2.write(format_biom_table(new_de_novo_table))
+	doc2.close()
+
+	pass
