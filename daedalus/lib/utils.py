@@ -13,6 +13,8 @@ from matplotlib import pylab as plb
 from scipy import stats
 import numpy as np
 from biom.parse import parse_biom_table as pbt
+from qiime.filter import filter_otus_from_otu_table as filter_otus
+from qiime.format import format_biom_table
 
 from feature_group import feature_group as fg
 
@@ -88,7 +90,6 @@ def parse_feature_importance_scores(fp,accuracy,features):
 
 
 def filter_biom_by_de_novo(otu_table_p,output_p):
-	os.mkdir(output_p)
 
 
 	idref = []
@@ -105,6 +106,8 @@ def filter_biom_by_de_novo(otu_table_p,output_p):
 
 	os.mkdir(output_p+"/filters")
 
+	filters = {'id_ref':dnovo , 'de_novo':idref}
+
 	#make filter for the otus
 	filter_dnovo = open(output_p+'/filters/filter_dnovo.txt','w')
 	filter_idref = open(output_p+'/filters/filter_idref.txt','w') 
@@ -120,7 +123,34 @@ def filter_biom_by_de_novo(otu_table_p,output_p):
 	#filtering the otus
 
 	os.mkdir(output_p+'/otus')
-	filter_otu_command = "qiime filter_otus_from_otu_table.py -i {} -e {} -o {}"
+	#filter_otu_command = "qiime filter_otus_from_otu_table.py -i {} -e {} -o {}"
+
+	for table_name,otus_to_filter in filters.iteritems():
+		otus_to_keep = set(biom_table.ObservationIds)
+		otus_to_keep -= set(otus_to_filter)
+
+		filtered_otu_table = filter_otus(
+			biom_table,
+			otus_to_keep,
+			0,
+			np.inf,
+			0,
+			np.inf,
+			False)
+		output_table = open(output_p+'/otus/'+table_name+'_otu_table.biom',"w")
+		output_table.write(format_biom_table(filtered_otu_table))
+		output_table.close()
+
+	return 
+
+
+
+
+
+
+
+
+	## filtering process
 
 	os.system(filter_otu_command.format(
 		otu_table_p,
@@ -249,3 +279,6 @@ def quantify_occurences_through_table(features_path,features_files_list,accuracy
 	doc.close()
 	
 	pass
+
+
+
