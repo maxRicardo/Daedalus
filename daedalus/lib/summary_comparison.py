@@ -22,23 +22,28 @@ def make_supervised_summary_set(gr1_p,gr2_p):
 	gr_2 = []
 
 	for i in gr_1_dir:
-		gr_1.append(gr1_p+'/'+i+'/summary.txt')
+		full_p = gr1_p+'/'+i+'/summary.txt'
+		gr_1.append(full_p)
+		
 
 	for i in gr_2_dir:
-		gr_2_dir.append(gr2_p+'/'+i+'summary.txt')
+		full_p = gr2_p+'/'+i+'/summary.txt'
+		gr_2.append(full_p)
+		
+		
 
 	summary_set_list = []
 	counter = 0
 
 	for i,d in zip(gr_1,gr_2):
 		id_ref_summ = utils.parse_supervised_summary(i)
-		de_novo_summ = utils.aprse_supervosed_summary(d)
+		de_novo_summ = utils.parse_supervised_summary(d)
 
-		summary_set(
-			'group_'+counter,
+		summary_set=(
+			'group_'+str(counter),
 			id_ref_summ['ratio'],
 			de_novo_summ['ratio'],
-			id_ref_summ['ratio']-de_novo_summ['ratio'])
+			eval(id_ref_summ['ratio'])-eval(de_novo_summ['ratio']))
 		
 		summary_set_list.append(summary_set)
 		counter+=1
@@ -48,11 +53,11 @@ def make_supervised_summary_set(gr1_p,gr2_p):
 
 
 
-def make_summary_comparison_output(summary_set_list):
+def make_summary_comparison_output(summary_set_list,output_p):
 	header = " group_name	id_ref	De_Novo	delta_diference\n"
 	templ = '{}	{}	{}	{}\n'
 
-	report = open("summary_inside_compare_results_"+category+".txt","w")
+	report = open(output_p+"/summary_inside_compare_results.txt","w")
 	report.write(header)
 
 	dnovo_count = 0
@@ -60,7 +65,7 @@ def make_summary_comparison_output(summary_set_list):
 
 	for result in summary_set_list:
 
-		report.write(templ.format(result))
+		report.write(templ.format(*result))
 
 		if result[3] > 0:
 			idref_count+=1

@@ -29,13 +29,13 @@ def parse_supervised_summary(fp):
 
 	for line in doc:
 		if 'Estimated error' in line:
-			sum_dir["estimated_error"] = line.split("\t")[2] 
+			sum_dir["estimated_error"] = line.split("\t")[1].strip() 
 		if 'Baseline error' in line:
-			sum_dir["baseline_error"] = line.split("\t")[2]
+			sum_dir["baseline_error"] = line.split("\t")[1].strip()
 		if 'Ratio baseline error to observed error' in line:
-			sum_dir["ratio"] = line.split("\t")[6]
+			sum_dir["ratio"] = line.split("\t")[1].strip()
 
-
+	doc.close()		
 	return sum_dir
 
 
