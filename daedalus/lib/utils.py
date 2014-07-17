@@ -7,7 +7,7 @@
 
 import os
 import shutil as sh
-import datetime as dt
+
 
 from matplotlib import pylab as plb
 from scipy import stats
@@ -126,10 +126,10 @@ def filter_biom_by_de_novo(otu_table_p,output_p):
 	#filtering the otus
 
 	os.mkdir(output_p+'/otus')
-
+	flag = False
 	for table_name,otus_to_filter in filters.iteritems():
 		otus_to_keep = set(biom_table.ObservationIds)
-		otus_to_keep -= set(otus_to_filter)
+		otus_to_keep -= set(dnovo)
 
 		filtered_otu_table = filter_otus(
 			biom_table,
@@ -138,11 +138,11 @@ def filter_biom_by_de_novo(otu_table_p,output_p):
 			np.inf,
 			0,
 			np.inf,
-			False)
+			flag)
 		output_table = open(output_p+'/otus/'+table_name+'_otu_table.biom',"w")
 		output_table.write(format_biom_table(filtered_otu_table))
 		output_table.close()
-
+		flag = True
 	return 
 
 
