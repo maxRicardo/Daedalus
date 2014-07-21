@@ -14,8 +14,8 @@ import daedalus.lib.utils as du
 def parse_argument():
 	parser = argparse.ArgumentParser()
 
-	parser.add_argument("-r",help = "",required = True , dest = "ref_table_p" , type = str)
-	parser.add_argument("-d",help = "",required = True ,  dest = "dnovo_table_p",type = str)
+	parser.add_argument("-i",help = "",required = True , dest = "otu_table_p" , type = str)
+	parser.add_argument("-r",help = "",required = True ,  dest = "reference_table_p",type = str)
 	parser.add_argument("-n",help="",required = True , dest = 'seq_number',type = int)
 	parser.add_argument("-o",help = "The filename to where the results will be written to. ", default = ".", dest = "working_path", type = str)
 	parser.add_argument("-f",help = "force override of the output files if they exist", action='store_true' , dest = "override")
@@ -40,8 +40,10 @@ def main():
 
 
 	du.determine_sample_eveness_for_tables(
-		pbt(open(opt.ref_table_p,"r")),
-		pbt(open(opt.dnovo_table_p,"r")),
+		pbt(open(opt.otu_table_p,"r")),
+		opt.otu_table_p.split(".biom")[0],
+		pbt(open(opt.reference_table_p,"r")),
+		opt.reference_table_p.split(".biom")[0],
 		opt.seq_number,
 		opt.working_path)
 

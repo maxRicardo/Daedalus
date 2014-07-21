@@ -12,7 +12,7 @@ from biom.parse import parse_biom_table as pbt
 def parse_argument():
 	parser = argparse.ArgumentParser()
 
-	parser.add_argument("-i",help = "",required = True , dest = "ref_supervised_p" , type = str)
+	parser.add_argument("-i",help = "",required = True , dest = "otu_table_p" , type = str)
 	parser.add_argument("-o",help = "The filename to where the results will be written to. ", default = ".", dest = "working_path", type = str)
 	opt = parser.parse_args()
 
@@ -22,9 +22,9 @@ def parse_argument():
 
 
 def main():
-	opt = parse_argument():
+	opt = parse_argument()
 
-	biom_table = pbt(open(opt.working_path,"r"))
+	biom_table = pbt(open(opt.otu_table_p,"r"))
 	abundance = calculate_otu_relative_abundance(biom_table)
 	print_relative_abundance_table(abundance,opt.working_path)
 
@@ -40,8 +40,7 @@ def calculate_otu_relative_abundance(biom_table):
 	abundance = []
 
 	for otu in biom_table.iterObservations():
-		data = biom_table.ObservationData(otu)
-		element(otu,data.sum()/totalCount)
+		element = (otu[1],otu[0].sum(),otu[0].sum()/totalCount)
 		abundance.append(element)
 
 	return abundance
@@ -49,8 +48,8 @@ def calculate_otu_relative_abundance(biom_table):
 
 
 def print_relative_abundance_table(abundance,filep):
-	head = "OTU\tABUNDANCE\n"
-	tmpl = "{}\t{}\n"
+	head = "OTU\tABUNDANCE\tRELATIVE_ABUNDANCE\n"
+	tmpl = "{}\t{}\t{}\n"
 
 	doc = open(filep,"w")
 	doc.write(head)

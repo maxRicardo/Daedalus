@@ -291,22 +291,22 @@ def subset_samples_by_seq_number(otu_table,seq_number):
 	return new_sample_set
 
 
-def determine_sample_eveness_for_tables(ref_table,de_novo_table,seq_number,output_p):
+def determine_sample_eveness_for_tables(otu_table_p,name_otu_table,reference_table_p,name_reference_table,seq_number,output_p):
 
-	sample_de_novo = subset_samples_by_seq_number(de_novo_table,seq_number)
-	sample_ref = subset_samples_by_seq_number(ref_table,seq_number)
+	sample_de_novo = subset_samples_by_seq_number(reference_table_p,seq_number)
+	sample_ref = subset_samples_by_seq_number(otu_table_p,seq_number)
 	common_sample_ids = sample_de_novo.intersection(sample_ref)
 
 	#filtering from otu table 
-	new_ref_table = filter_samples(ref_table,common_sample_ids,0,np.inf)
-	new_de_novo_table = filter_samples(de_novo_table,common_sample_ids,0,np.inf)
+	new_otu_table = filter_samples(otu_table_p,common_sample_ids,0,np.inf)
+	new_reference_table = filter_samples(reference_table_p,common_sample_ids,0,np.inf)
 	
-	doc1 = open(output_p+'/id_ref_equalized_samples_number_'+str(seq_number)+'.biom',"w")
-	doc1.write(format_biom_table(new_ref_table))
+	doc1 = open(output_p+name_otu_table+str(seq_number)+'.biom',"w")
+	doc1.write(format_biom_table(new_otu_table))
 	doc1.close()
 
-	doc2 = open(output_p+'/de_novo_equalized_samples_number_'+str(seq_number)+'.biom',"w")
-	doc2.write(format_biom_table(new_de_novo_table))
+	doc2 = open(output_p+name_reference_table+str(seq_number)+'.biom',"w")
+	doc2.write(format_biom_table(new_reference_table))
 	doc2.close()
 
 	pass

@@ -37,16 +37,10 @@ def main():
 	else:
 		raise OSError(" File already exist!")
 
-
+		
 	summary_set_list = sc.make_supervised_summary_set(
 		opt.ref_supervised_p,
 		opt.dnovo_supervised_p)
-
-	for i in summary_set_list:
-		print i
-		print '\n'
-
-	raw_input(" ")
 
 	sc.make_summary_comparison_output(summary_set_list,opt.working_path)
 
