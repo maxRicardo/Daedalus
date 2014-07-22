@@ -53,8 +53,8 @@ def make_supervised_summary_set(gr1_p,gr2_p):
 
 
 
-def make_summary_comparison_output(summary_set_list,output_p):
-	header = " group_name	id_ref	De_Novo	delta_diference\n"
+def make_summary_comparison_output(summary_set_list,names,output_p):
+	header = " group_name\t"+names[0]+"\t"+names[1]+"\tldelta_diference\n"
 	templ = '{}	{}	{}	{}\n'
 
 	report = open(output_p+"/summary_inside_compare_results.txt","w")

@@ -14,8 +14,8 @@ import daedalus.lib.summary_comparison as sc
 def parse_argument():
 	parser = argparse.ArgumentParser()
 
-	parser.add_argument("-r",help = "",required = True , dest = "ref_supervised_p" , type = str)
-	parser.add_argument("-d",help = "",required = True ,  dest = "dnovo_supervised_p",type = str)
+	parser.add_argument("-i",help = "",required = True , dest = "first_set_p" , type = str)
+	parser.add_argument("-r",help = "",required = True ,  dest = "second_set_p",type = str)
 	parser.add_argument("-o",help = "The filename to where the results will be written to. ", default = ".", dest = "working_path", type = str)
 	parser.add_argument("-f",help = "force override of the output files if they exist", action='store_true' , dest = "override")
 	opt = parser.parse_args()
@@ -39,10 +39,12 @@ def main():
 
 		
 	summary_set_list = sc.make_supervised_summary_set(
-		opt.ref_supervised_p,
-		opt.dnovo_supervised_p)
+		opt.first_set_p,
+		opt.second_set_p)
 
-	sc.make_summary_comparison_output(summary_set_list,opt.working_path)
+	sc.make_summary_comparison_output(summary_set_list,
+		list(opt.first_set_p.split["/"][-1],opt.second_set_p.split("/")[-1]),
+		opt.working_path)
 
 
 	return 
