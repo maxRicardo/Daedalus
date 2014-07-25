@@ -43,7 +43,7 @@ def main():
 		opt.second_set_p)
 
 	sc.make_summary_comparison_output(summary_set_list,
-		list(opt.first_set_p.split["/"][-1],opt.second_set_p.split("/")[-1]),
+		[opt.first_set_p.split("/")[-1],opt.second_set_p.split("/")[-1]],
 		opt.working_path)
 
 

@@ -102,7 +102,7 @@ def filter_biom_by_de_novo(otu_table_p,output_p):
 
 	#determine filtering objects
 	for obj in biom_table.ObservationIds:
-		if "New" in obj:
+		if "New" in obj or "CleanUp" in obj:
 			dnovo.append(obj)
 		else:
 			idref.append(obj)
