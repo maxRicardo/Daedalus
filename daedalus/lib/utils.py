@@ -281,8 +281,8 @@ def quantify_occurences_through_table(features_path,features_files_list,accuracy
 
 
 
-def subset_samples_by_seq_number(otu_table,seq_number):
-	otu_table_stats = biom_stats(otu_table)
+def subset_samples_by_seq_number(otu_table_stats,seq_number):
+
 	new_sample_set =set()
 	for sample,count in otu_table_stats[-1].iteritems():
 		if count > seq_number:
@@ -290,11 +290,20 @@ def subset_samples_by_seq_number(otu_table,seq_number):
 
 	return new_sample_set
 
+def determine_sample_preservation_depth(otu_table_1,otu_table_2):
+	table_1 = biom_stats(otu_table_1)
+	table_2 = biom_stats(otu_table_2)
 
-def determine_sample_eveness_for_tables(otu_table_p,name_otu_table,reference_table_p,name_reference_table,seq_number,output_p):
 
-	sample_de_novo = subset_samples_by_seq_number(reference_table_p,seq_number)
-	sample_ref = subset_samples_by_seq_number(otu_table_p,seq_number)
+
+
+
+	return 
+
+def equalize_tables_at_rarefaction_point(otu_table_p,name_otu_table,reference_table_p,name_reference_table,seq_number,output_p):
+
+	sample_de_novo = subset_samples_by_seq_number(biom_stats(reference_table_p),seq_number)
+	sample_ref = subset_samples_by_seq_number(biom_stats(otu_table_p),seq_number)
 	common_sample_ids = sample_de_novo.intersection(sample_ref)
 
 	#filtering from otu table 
@@ -309,4 +318,6 @@ def determine_sample_eveness_for_tables(otu_table_p,name_otu_table,reference_tab
 	doc2.write(format_biom_table(new_reference_table))
 	doc2.close()
 
-	pass
+	return
+
+

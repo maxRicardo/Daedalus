@@ -16,6 +16,7 @@ def parse_argument():
 
 	parser.add_argument("-i",help = "",required = True , dest = "first_set_p" , type = str)
 	parser.add_argument("-r",help = "",required = True ,  dest = "second_set_p",type = str)
+	parser.add_argument("-c",help = "",dest = "full_set_p",type = str,default = None)
 	parser.add_argument("-o",help = "The filename to where the results will be written to. ", default = ".", dest = "working_path", type = str)
 	parser.add_argument("-f",help = "force override of the output files if they exist", action='store_true' , dest = "override")
 	opt = parser.parse_args()
@@ -40,11 +41,10 @@ def main():
 		
 	summary_set_list = sc.make_supervised_summary_set(
 		opt.first_set_p,
-		opt.second_set_p)
+		opt.second_set_p,
+		opt.full_set_p)
 
-	sc.make_summary_comparison_output(summary_set_list,
-		[opt.first_set_p.split("/")[-1],opt.second_set_p.split("/")[-1]],
-		opt.working_path)
+	sc.make_summary_comparison_output(summary_set_list,opt.working_path)
 
 
 	return 

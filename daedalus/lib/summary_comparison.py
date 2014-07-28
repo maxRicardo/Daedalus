@@ -14,48 +14,76 @@ import utils
 
 #asume that each path has a full set of tables to compare 
 
-def make_supervised_summary_set(gr1_p,gr2_p):
-	gr_1_dir = sorted(os.listdir(gr1_p))
-	gr_2_dir = sorted(os.listdir(gr2_p))
+def make_supervised_summary_set(reference_p,dnovo_p,complete_p = None):
+	reference = []
+	dnovo = []
+	complete = []
 
-	gr_1 = []
-	gr_2 = []
+	reference_dir = sorted(os.listdir(reference_p))
+	dnovo_dir = sorted(os.listdir(dnovo_p))
+	
 
-	for i in gr_1_dir:
-		full_p = gr1_p+'/'+i+'/summary.txt'
-		gr_1.append(full_p)
+
+	for i in reference_dir:
+		full_p = reference_p+'/'+i+'/summary.txt'
+		reference.append(full_p)
 		
 
-	for i in gr_2_dir:
-		full_p = gr2_p+'/'+i+'/summary.txt'
-		gr_2.append(full_p)
-		
+	for i in dnovo_dir:
+		full_p = dnovo_p+'/'+i+'/summary.txt'
+		dnovo.append(full_p)
 		
 
 	summary_set_list = []
 	counter = 0
 
-	for i,d in zip(gr_1,gr_2):
-		id_ref_summ = utils.parse_supervised_summary(i)
-		de_novo_summ = utils.parse_supervised_summary(d)
+	for i in dnovo:
+		de_novo_sum = utils.parse_supervised_summary(i)
+		de_novo_sum['name'] = i.split("summary")[0].replace("/","_")
+		summary_set_line = (de_novo_sum["name"],
+							de_novo_sum["baseline_error"],
+							de_novo_sum["estimated_error"],
+							de_novo_sum["ratio"],
+							"de_novo")
+		summary_set_list.append(summary_set_line)
 
-		summary_set=(
-			'group_'+str(counter),
-			id_ref_summ['ratio'],
-			de_novo_summ['ratio'],
-			eval(id_ref_summ['ratio'])-eval(de_novo_summ['ratio']))
-		
-		summary_set_list.append(summary_set)
-		counter+=1
+	for i in reference:
+		reference_sum = utils.parse_supervised_summary(i)
+		reference_sum['name'] = i.split("summary")[0].replace("/","_")
+		summary_set_line = (reference_sum["name"],
+							reference_sum["baseline_error"],
+							reference_sum["estimated_error"],
+							reference_sum["ratio"],
+							"reference")
+		summary_set_list.append(summary_set_line)
+
+
+	if complete_p != None :
+		complete_dir = sorted(os.listdir(complete_p))
+
+		for i in complete_dir:
+			full_p = complete_p+'/'+i+'/summary.txt'
+			complete.append(full_p)
+
+		for i in complete:
+			complete_sum = utils.parse_supervised_summary(i)
+			complete_sum['name'] = i.split("summary")[0].replace("/","_")
+			summary_set_line = (complete_sum["name"],
+								complete_sum["baseline_error"],
+								complete_sum["estimated_error"],
+								complete_sum["ratio"],
+								"complete")
+			summary_set_list.append(summary_set_line)
+
 
 	return summary_set_list
 
 
 
 
-def make_summary_comparison_output(summary_set_list,names,output_p):
-	header = " group_name\t"+names[0]+"\t"+names[1]+"\tldelta_diference\n"
-	templ = '{}	{}	{}	{}\n'
+def make_summary_comparison_output(summary_set_list,output_p):
+	header = "GROUP_ID\tBASELINE_ERROR\tESTIMATED_ERROR\tRATIO\tOTU_PICKING\n"
+	templ = '{}\t{}\t{}\t{}\t{}\n'
 
 	report = open(output_p+"/summary_inside_compare_results.txt","w")
 	report.write(header)
@@ -66,18 +94,6 @@ def make_summary_comparison_output(summary_set_list,names,output_p):
 	for result in summary_set_list:
 
 		report.write(templ.format(*result))
-
-		if result[3] > 0:
-			idref_count+=1
-
-		elif result[3] < 0:
-			dnovo_count+=1
-			
-	report.write("-----------------------------------------------------------\n")
-	report.write("'%' of improvement : 	{}	{}\n".format(
-		idref_count/len(summary_set_list),
-		dnovo_count/len(summary_set_list)
-		))
 
 	report.close()
 
