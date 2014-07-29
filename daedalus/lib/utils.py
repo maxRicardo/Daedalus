@@ -295,9 +295,6 @@ def determine_sample_preservation_depth(otu_table_1,otu_table_2):
 	table_2 = biom_stats(otu_table_2)
 
 
-
-
-
 	return 
 
 def equalize_tables_at_rarefaction_point(otu_table_p,name_otu_table,reference_table_p,name_reference_table,seq_number,output_p):
@@ -310,11 +307,11 @@ def equalize_tables_at_rarefaction_point(otu_table_p,name_otu_table,reference_ta
 	new_otu_table = filter_samples(otu_table_p,common_sample_ids,0,np.inf)
 	new_reference_table = filter_samples(reference_table_p,common_sample_ids,0,np.inf)
 	
-	doc1 = open(output_p+"/"+name_otu_table+"_equalized_"+str(seq_number)+'.biom',"w")
+	doc1 = open(output_p+"/"+name_otu_table.replace("/","_")+"_equalized_"+str(seq_number)+'.biom',"w")
 	doc1.write(format_biom_table(new_otu_table))
 	doc1.close()
 
-	doc2 = open(output_p+"/"+name_reference_table+"_equalized_"+str(seq_number)+'.biom',"w")
+	doc2 = open(output_p+"/"+name_reference_table.replace("/","_")+"_equalized_"+str(seq_number)+'.biom',"w")
 	doc2.write(format_biom_table(new_reference_table))
 	doc2.close()
 
