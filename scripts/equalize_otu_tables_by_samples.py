@@ -39,7 +39,7 @@ def main():
 		raise OSError(" File already exist!")
 
 
-	du.determine_sample_eveness_for_tables(
+	du.equalize_tables_at_rarefaction_point(
 		pbt(open(opt.otu_table_p,"r")),
 		opt.otu_table_p.split(".biom")[0],
 		pbt(open(opt.reference_table_p,"r")),
