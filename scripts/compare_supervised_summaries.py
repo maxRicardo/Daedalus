@@ -29,24 +29,19 @@ def parse_argument():
 def main():
 	opt = parse_argument()
 
-	if not os.path.exists(opt.working_path):
-		os.mkdir(opt.working_path)
-
-	elif opt.override:
-		sh.rmtree(opt.working_path)
-		os.mkdir(opt.working_path)
-	else:
-		raise OSError(" File already exist!")
-
+	if not os.path.exists(opt.working_path) or opt.override:
 		
-	summary_set_list = sc.make_supervised_summary_set(
+		summary_set_list = sc.make_supervised_summary_set(
 		opt.first_set_p,
 		opt.second_set_p,
 		opt.full_set_p)
 
-	sc.make_summary_comparison_output(summary_set_list,opt.working_path)
+		sc.make_summary_comparison_output(summary_set_list,opt.working_path)
 
+	else:
+		raise OSError(" File already exist!")
 
+		
 	return 
 
 

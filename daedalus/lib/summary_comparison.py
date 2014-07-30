@@ -85,7 +85,7 @@ def make_summary_comparison_output(summary_set_list,output_p):
 	header = "GROUP_ID\tBASELINE_ERROR\tESTIMATED_ERROR\tRATIO\tOTU_PICKING\n"
 	templ = '{}\t{}\t{}\t{}\t{}\n'
 
-	report = open(output_p+"/summary_inside_compare_results.txt","w")
+	report = open(output_p+".txt","w")
 	report.write(header)
 
 	dnovo_count = 0
