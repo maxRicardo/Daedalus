@@ -1,7 +1,8 @@
 #!/usr/bin/Rscript --vanilla --default-packages=utils
 
 library(ggplot2)
-source('./summary_graphsR.R')
+reference = paste(args[4],"daedalus/graphs/summary_graphsR.R",sep="/")
+source(reference)
 
 args<-commandArgs(TRUE)
 
