@@ -2,27 +2,28 @@
 library(ggplot2)
 
 
-anova_for_summary_comparison<- function(table,output){
+anova_for_summary_comparison<- function(table,title,output='output'){
   
   aov(RATIO ~ OTU_PICKING,table)-> stats
-  capture.output(summary(stats),file=paste(output,"_anova.txt",sep="_"))
+  capture.output(summary(stats),file=paste(output,"anova.txt",sep="_"))
+  capture.output(TukeyHSD(stats),file=paste(output,"anova.txt",sep="_"),append=T)
   
 }
 
 
-graph_boxplot_summary_comparion <- function(table,title= "Comparison Summary SL"){
+graph_boxplot_summary_comparion <- function(table,title= "Comparison Summary SL",output='output'){
   g <- ggplot(table,aes(OTU_PICKING,RATIO,colour = OTU_PICKING))
   g <- g + geom_boxplot()+geom_jitter(position = position_jitter(width = .5, height = 3)) + stat_boxplot(geom='errorbar')
   g <- g + ggtitle(title)+xlab("GROUP_ID")+ylab("IMPROVEMENT RATIO")
   g
-  ggsave(file=paste(title,"_boxplot.jpeg",sep = "."))
+  ggsave(file=paste(output,"boxplot.jpeg",sep = "_"))
   return (g)
 }
 
-graph_continuos_summary_comparison <- function(table,title="Comparison Summary SL"){
+graph_continuos_summary_comparison <- function(table,title="Comparison Summary SL",output=''){
   
   
-ggplot(table,aes(x=seq(100))) -> g
+ggplot(table,aes(x=seq(as.integer(length(table$RATIO)/length(levels(table$OTU_PICKING)))))) -> g
 
 for (i in levels(table$OTU_PICKING)){
   g + geom_line(aes(y = RATIO,colour = OTU_PICKING),data = table[which(table$OTU_PICKING == i),]) -> g
@@ -32,7 +33,7 @@ for (i in levels(table$OTU_PICKING)){
 g = g+ggtitle(title)+xlab("GROUP_ID")+ylab("IMPROVEMENT RATIO")
 
 g
-ggsave(file=paste(title,"_continuos.jpeg",sep = "."))
+ggsave(file=paste(output,"continuos.jpeg",sep = "_"))
 return(g)
   
 }
