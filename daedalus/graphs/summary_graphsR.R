@@ -2,7 +2,7 @@
 library(ggplot2)
 
 
-anova_for_summary_comparison<- function(table,title,output='output'){
+anova_for_summary_comparison<- function(table,title = "Comparison Summary SL",output='output',saving=T){
   
   aov(RATIO ~ OTU_PICKING,table)-> stats
   capture.output(summary(stats),file=paste(output,"anova.txt",sep="_"))
@@ -11,12 +11,20 @@ anova_for_summary_comparison<- function(table,title,output='output'){
 }
 
 
-graph_boxplot_summary_comparion <- function(table,title= "Comparison Summary SL",output='output'){
-  g <- ggplot(table,aes(OTU_PICKING,RATIO,colour = OTU_PICKING))
-  g <- g + geom_boxplot()+geom_jitter(position = position_jitter(width = .5, height = 3)) + stat_boxplot(geom='errorbar')
-  g <- g + ggtitle(title)+xlab("GROUP_ID")+ylab("IMPROVEMENT RATIO")
+graph_boxplot_summary_comparion <- function(table,title= "Comparison Summary SL",output='output',saving=T){
+  
+  HEIGHT = .1
+  if ( max(table$RATIO) > (100*HEIGHT)){
+    HEIGHT= 3
+  }
+  g <- ggplot(table,aes(OTU_PICKING,RATIO,colour = OTU_PICKING),ymax=max(table$RATIO))
+  g <- g + geom_boxplot(outlier.colour=NA)+geom_point(position = position_jitter(width =.5, height = HEIGHT)) + stat_boxplot(geom='errorbar')
+  g <- g + ggtitle(title)+xlab(" ")+ylab("IMPROVEMENT RATIO")
+  
+  if( saving == T){
   g
   ggsave(file=paste(output,"boxplot.jpeg",sep = "_"))
+  }
   return (g)
 }
 
@@ -32,8 +40,10 @@ for (i in levels(table$OTU_PICKING)){
 
 g = g+ggtitle(title)+xlab("GROUP_ID")+ylab("IMPROVEMENT RATIO")
 
+if ( saving == T){
 g
 ggsave(file=paste(output,"continuos.jpeg",sep = "_"))
+}
 return(g)
   
 }
