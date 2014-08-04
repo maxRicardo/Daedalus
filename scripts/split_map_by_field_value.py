@@ -30,7 +30,7 @@ def split_map_by_field_value(map_file,category,value):
 
 	doc,newDoc = [],[]
 	catPos = -1
-	outputName = map_file.strip(".txt")+"split_"+category+"_"+value+"_.txt"  
+	outputName = map_file.strip(".txt")+"_split_"+category+"_"+value+"_.txt"  
 
 	for i in open(map_file,"r"):
 		doc.append(i)
