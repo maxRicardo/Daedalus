@@ -21,7 +21,7 @@ def parse_argument():
 def main():
 	opt = parse_argument()
 
-	split_map_by_field_value(opt.map,opt.category,opt.value)
+	split_map_by_field_value(opt.mapping_file,opt.category,opt.value)
 	return 
 
 
