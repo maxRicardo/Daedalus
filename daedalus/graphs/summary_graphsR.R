@@ -28,7 +28,7 @@ graph_boxplot_summary_comparion <- function(table,title= "Comparison Summary SL"
   return (g)
 }
 
-graph_continuos_summary_comparison <- function(table,title="Comparison Summary SL",output=''){
+graph_continuos_summary_comparison <- function(table,title="Comparison Summary SL",output='',saving=T){
   
   
 ggplot(table,aes(x=seq(as.integer(length(table$RATIO)/length(levels(table$OTU_PICKING)))))) -> g
