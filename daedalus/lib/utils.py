@@ -33,7 +33,7 @@ def parse_supervised_summary(fp):
 		if 'Baseline error' in line:
 			sum_dir["baseline_error"] = line.split("\t")[1].strip()
 		if 'Ratio baseline error to observed error' in line:
-			sum_dir["ratio"] = np.nan_to_num(np.asarray(line.split("\t")[1].strip()))
+			sum_dir["ratio"] = np.nan_to_num(np.asarray(float(line.split("\t")[1].strip())))
 
 	doc.close()		
 	return sum_dir
