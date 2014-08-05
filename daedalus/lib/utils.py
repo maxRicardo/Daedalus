@@ -47,7 +47,7 @@ def parse_supervised_summary(fp):
 
 				sum_dir["ratio"] =  NEW_INF
 			else :
-				sum_dir["ratio"] = __INFINITE__
+				sum_dir["ratio"] = ratio
 
 	doc.close()		
 	return sum_dir
