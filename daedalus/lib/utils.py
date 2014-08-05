@@ -22,6 +22,8 @@ from qiime.format import format_biom_table
 from feature_group import feature_group as fg
 
 
+__INFINITE__ = 999999  
+
 
 def parse_supervised_summary(fp):
 	doc = open(fp,"r")
@@ -33,7 +35,19 @@ def parse_supervised_summary(fp):
 		if 'Baseline error' in line:
 			sum_dir["baseline_error"] = line.split("\t")[1].strip()
 		if 'Ratio baseline error to observed error' in line:
-			sum_dir["ratio"] = int(np.nan_to_num(np.asarray(float(line.split("\t")[1].strip()))))
+			ratio = line.split("\t")[1].strip()
+			
+			if ratio.lower() == "inf":
+				sum_dir["ratio"] = __INFINITE__
+
+			elif eval(ratio) >= __INFINITE__ :
+				NEW_INF = __INFINITE__
+				while eval(ratio) >= NEW_INF :
+					NEW_INF = NEW_INF * 100
+
+				sum_dir["ratio"] =  NEW_INF
+			else :
+				sum_dir["ratio"] = __INFINITE__
 
 	doc.close()		
 	return sum_dir
