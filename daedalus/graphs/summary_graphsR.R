@@ -2,24 +2,41 @@
 library(ggplot2)
 
 
-anova_for_summary_comparison<- function(table,title = "Comparison Summary SL",output='output',saving=T){
+anova_for_summary_comparison<- function(table,title = "Comparison Summary SL",output='output',inf_case = F,saving=T){
+  VAR = "RATIO"
+  if (inf_case == T ){ VAR = "ESTIMATED_ERROR"}
   
-  aov(RATIO ~ OTU_PICKING,table)-> stats
+  FORMULA = paste(VAR,"~ OTU_PICKING",sep=" ")
+  aov(as.formula(FORMULA),table)-> stats
   capture.output(summary(stats),file=paste(output,"anova.txt",sep="_"))
   capture.output(TukeyHSD(stats),file=paste(output,"anova.txt",sep="_"),append=T)
+  return (TukeyHSD(stats))
   
 }
 
 
-graph_boxplot_summary_comparion <- function(table,title= "Comparison Summary SL",output='output',saving=T){
+graph_boxplot_summary_comparion <- function(table,title= "Comparison Summary SL",output='output',inf_case=F,saving=T){
   
   HEIGHT = .1
-  if ( max(table$RATIO) > (100*HEIGHT)){
-    HEIGHT= 3
+  Y_LAB = "IMPROVEMENT RATIO"
+  Y_VAR = "RATIO"
+  
+  if ( inf_case == F ){
+    
+    if ( max(table$RATIO) > (100*HEIGHT)){
+      HEIGHT= 3
+    } 
   }
-  g <- ggplot(table,aes(OTU_PICKING,RATIO,colour = OTU_PICKING),ymax=max(table$RATIO))
+  else {
+    Y_VAR='ESTIMATED_ERROR'
+    Y_LAB = Y_VAR
+    HEIGHT = .001
+    
+  }
+   
+  g <- ggplot(table,aes_string(x ="OTU_PICKING",y =Y_VAR,colour = "OTU_PICKING"),ymax=as.character(max(table[Y_VAR])))
   g <- g + geom_boxplot(outlier.colour=NA)+geom_point(position = position_jitter(width =.5, height = HEIGHT)) + stat_boxplot(geom='errorbar')
-  g <- g + ggtitle(title)+xlab(" ")+ylab("IMPROVEMENT RATIO")
+  g <- g + ggtitle(title)+xlab(" ")+ylab(Y_LAB)
   
   if( saving == T){
   g
@@ -28,23 +45,33 @@ graph_boxplot_summary_comparion <- function(table,title= "Comparison Summary SL"
   return (g)
 }
 
-graph_continuos_summary_comparison <- function(table,title="Comparison Summary SL",output='',saving=T){
+graph_continuos_summary_comparison <- function(table,title="Comparison Summary SL",output='',inf_case = F,saving=T){
+  
+  ggplot(table,aes(x = seq(as.integer(length(table$RATIO)/length(levels(table$OTU_PICKING)))))) -> g
+  print( " Never passed here! ")
   
   
-ggplot(table,aes(x=seq(as.integer(length(table$RATIO)/length(levels(table$OTU_PICKING)))))) -> g
-
-for (i in levels(table$OTU_PICKING)){
-  g + geom_line(aes(y = RATIO,colour = OTU_PICKING),data = table[which(table$OTU_PICKING == i),]) -> g
+  for (i in levels(table$OTU_PICKING)){
+    
+    new_table = table[which(table$OTU_PICKING == i),]
+    
+    if(inf_case == F){
+      g + geom_line(aes(y=RATIO,colour = OTU_PICKING),data=new_table) -> g
+      print(" Is error here?!! ")
+    }
+    else {
+      g + geom_line(aes(y= ESTIMATED_ERROR,colour = OTU_PICKING),data = new_table) -> g
+    }
+    
+  }
   
-}
-
-g = g+ggtitle(title)+xlab("GROUP_ID")+ylab("IMPROVEMENT RATIO")
-
-if ( saving == T){
-g
-ggsave(file=paste(output,"continuos.jpeg",sep = "_"))
-}
-return(g)
+  g = g+ggtitle(title)+xlab("GROUP_ID")+ylab("IMPROVEMENT")
+  
+  if ( saving == T){
+    g
+    ggsave(file=paste(output,"continuos.jpeg",sep = "_"))
+  }
+  return(g)
   
 }
 
