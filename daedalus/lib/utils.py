@@ -4,7 +4,7 @@
 # Date : May 30 2014
 # Parser for feature_importance_score 
 
-
+from __future__ import division 
 import os
 import shutil as sh
 
@@ -32,8 +32,10 @@ def parse_supervised_summary(fp):
 	for line in doc:
 		if 'Estimated error' in line:
 			sum_dir["estimated_error"] = line.split("\t")[1].strip() 
+			
 		if 'Baseline error' in line:
 			sum_dir["baseline_error"] = line.split("\t")[1].strip()
+
 		if 'Ratio baseline error to observed error' in line:
 			ratio = line.split("\t")[1].strip()
 			
@@ -302,20 +304,14 @@ def subset_samples_by_seq_number(otu_table_stats,seq_number):
 		if count > seq_number:
 			new_sample_set.add(sample)
 
-	return new_sample_set
-
-def determine_sample_preservation_depth(otu_table_1,otu_table_2):
-	table_1 = biom_stats(otu_table_1)
-	table_2 = biom_stats(otu_table_2)
-
-
-	return 
+	return new_sample_set 
 
 def equalize_tables_at_rarefaction_point(otu_table_p,name_otu_table,reference_table_p,name_reference_table,seq_number,output_p):
 
 	sample_de_novo = subset_samples_by_seq_number(biom_stats(reference_table_p),seq_number)
 	sample_ref = subset_samples_by_seq_number(biom_stats(otu_table_p),seq_number)
 	common_sample_ids = sample_de_novo.intersection(sample_ref)
+
 
 	#filtering from otu table 
 	new_otu_table = filter_samples(otu_table_p,common_sample_ids,0,np.inf)
@@ -325,9 +321,18 @@ def equalize_tables_at_rarefaction_point(otu_table_p,name_otu_table,reference_ta
 	doc1.write(format_biom_table(new_otu_table))
 	doc1.close()
 
+
+
 	doc2 = open(output_p+"/"+name_reference_table.replace("/","_")+"_equalized_"+str(seq_number)+'.biom',"w")
 	doc2.write(format_biom_table(new_reference_table))
 	doc2.close()
+
+	print " Percentage of Samples  : {}/{} , {}\n".format(
+															len(new_otu_table.SampleIds) ,
+															len(otu_table_p.SampleIds) ,
+															(len(new_otu_table.SampleIds)/len(otu_table_p.SampleIds))
+															)
+
 
 	return
 
