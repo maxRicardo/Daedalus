@@ -327,10 +327,10 @@ def equalize_tables_at_rarefaction_point(otu_table_p,name_otu_table,reference_ta
 	doc2.write(format_biom_table(new_reference_table))
 	doc2.close()
 
-	print " Percentage of Samples  : {}/{} , {}\n".format(
+	print " \nPercentage of Samples  : {}/{} , {}\n".format(
 															len(new_otu_table.SampleIds) ,
 															len(otu_table_p.SampleIds) ,
-															(len(new_otu_table.SampleIds)/len(otu_table_p.SampleIds))
+															(len(new_otu_table.SampleIds)/len(otu_table_p.SampleIds)) * 100
 															)
 
 
