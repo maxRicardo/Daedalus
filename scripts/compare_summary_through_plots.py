@@ -35,7 +35,7 @@ def main():
 
 	PROJECT_PATH = "/".join(sys.argv[0].split("/")[:-2])
 
-	command = "Rscript --slave --vanilla {}/daedalus/graphs/summary_comparison_through_plots.R {} {} {} {}"
+	command = "Rscript --slave --vanilla {}/daedalus/graphs/summary_comparison_through_plots.R {} {} {} {} {}"
 	os.system(command.format(
 				PROJECT_PATH,
 				PROJECT_PATH,
